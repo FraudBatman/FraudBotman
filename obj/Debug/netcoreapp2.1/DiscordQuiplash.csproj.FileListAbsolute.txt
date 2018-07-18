@@ -1,0 +1,11 @@
+/Users/fraud/Desktop/Codestuffs/DiscordQuiplash/bin/Debug/netcoreapp2.1/DiscordQuiplash.deps.json
+/Users/fraud/Desktop/Codestuffs/DiscordQuiplash/bin/Debug/netcoreapp2.1/DiscordQuiplash.runtimeconfig.json
+/Users/fraud/Desktop/Codestuffs/DiscordQuiplash/bin/Debug/netcoreapp2.1/DiscordQuiplash.runtimeconfig.dev.json
+/Users/fraud/Desktop/Codestuffs/DiscordQuiplash/bin/Debug/netcoreapp2.1/DiscordQuiplash.dll
+/Users/fraud/Desktop/Codestuffs/DiscordQuiplash/bin/Debug/netcoreapp2.1/DiscordQuiplash.pdb
+/Users/fraud/Desktop/Codestuffs/DiscordQuiplash/obj/Debug/netcoreapp2.1/DiscordQuiplash.csprojAssemblyReference.cache
+/Users/fraud/Desktop/Codestuffs/DiscordQuiplash/obj/Debug/netcoreapp2.1/DiscordQuiplash.csproj.CoreCompileInputs.cache
+/Users/fraud/Desktop/Codestuffs/DiscordQuiplash/obj/Debug/netcoreapp2.1/DiscordQuiplash.AssemblyInfoInputs.cache
+/Users/fraud/Desktop/Codestuffs/DiscordQuiplash/obj/Debug/netcoreapp2.1/DiscordQuiplash.AssemblyInfo.cs
+/Users/fraud/Desktop/Codestuffs/DiscordQuiplash/obj/Debug/netcoreapp2.1/DiscordQuiplash.dll
+/Users/fraud/Desktop/Codestuffs/DiscordQuiplash/obj/Debug/netcoreapp2.1/DiscordQuiplash.pdb
