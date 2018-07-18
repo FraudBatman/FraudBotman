@@ -10,6 +10,7 @@ namespace DiscordQuiplash
     {
         /*MEMBERS*/
         DiscordSocketClient client = null;
+        CommandHandler comhand = null;
         string token = "";
 
         /*FUNCTIONS*/
@@ -28,6 +29,10 @@ namespace DiscordQuiplash
             //log into discord
             await client.LoginAsync(TokenType.Bot, token);
             await client.StartAsync();
+
+            //prepare the command handler
+            comhand = new CommandHandler();
+            await comhand.Install(client);
 
             /*ACTIONS*/
             client.Log += Log;
