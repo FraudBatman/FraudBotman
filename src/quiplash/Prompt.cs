@@ -27,7 +27,7 @@ namespace DiscordQuiplash
             }
 
             //lines is now the number of lines to skip to find a prompt
-            lines = random.Next(lines);
+            lines = random.Next(0, lines);
             sr = new StreamReader(new FileStream("data/prompts.txt", FileMode.Open));
 
             while (lines != 0)

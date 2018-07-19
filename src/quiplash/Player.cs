@@ -31,6 +31,8 @@ namespace DiscordQuiplash
         {
             try
             {
+                await user.SendMessageAsync("Please answer the following 2 prompts as best as you can.");
+
                 //connect message being recieved to response checking
                 client.MessageReceived += CheckForResponse;
                 foreach (Prompt prompt in prompts)

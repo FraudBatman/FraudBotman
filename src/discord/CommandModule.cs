@@ -17,16 +17,22 @@ namespace DiscordQuiplash
         [Summary("creates a new Quiplash lobby in the channel, or joins one that has not started")]
         public async Task Play()
         {
+            bool told = false;
             //create game
             if (lobbyChannel == 0)
             {
+                told = true;
                 lobbyChannel = Context.Channel.Id;
                 await ReplyAsync("A lobby has been started! The game will start in one minute. Type \".play\" if you'd like to join!");
 
                 users = new List<IUser>();
                 users.Add(Context.User);
 
-                await Task.Delay(60000);
+                await Task.Delay(30000);
+
+                await ReplyAsync("The game will start in 30 seconds! Be sure you've joined the game using \".play\"!");
+
+                await Task.Delay(30000);
 
                 if (users.Count < 3)
                 {
@@ -52,15 +58,17 @@ namespace DiscordQuiplash
             }
 
             //game already started
-            if (game != null && game.Channel.Id == Context.Channel.Id)
+            if (game != null && game.Channel.Id == Context.Channel.Id && !told)
             {
+                told = true;
                 await ReplyAsync("Unfortuantely, you can't join an ongoing game.");
                 await Task.CompletedTask;
             }
 
             //join game
-            if (Context.Channel.Id == lobbyChannel)
+            if (Context.Channel.Id == lobbyChannel && !told)
             {
+                told = true;
                 if (users.Contains(Context.User))
                 {
                     await ReplyAsync("You are already in this game!");
@@ -77,7 +85,7 @@ namespace DiscordQuiplash
             }
 
             //stay in the channel
-            if (lobbyChannel != Context.Channel.Id)
+            if (lobbyChannel != Context.Channel.Id && !told)
             {
                 await ReplyAsync("Due to Fraud being bad, only one game of quiplash can be played at a time");
             }
@@ -86,8 +94,8 @@ namespace DiscordQuiplash
             await Task.CompletedTask;
         }
 
-        [Command("princesaallie")]
-        [Summary("She the princess")]
+        [Command("reyallie")]
+        [Summary("She the king")]
         public async Task PrincesaAllie()
         {
             var channel = Context.Channel as SocketTextChannel;
@@ -100,6 +108,13 @@ namespace DiscordQuiplash
         {
             var channel = Context.Channel as SocketTextChannel;
             await channel.SendMessageAsync("boop has nothing nice to say so shhh him");
+        }
+
+        [Command("whogay")]
+        [Summary("lol")]
+        public async Task WhoGay()
+        {
+            await ReplyAsync("@Mythic Bitch#7950 is gay lol");
         }
     }
 }

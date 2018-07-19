@@ -32,6 +32,9 @@ namespace DiscordQuiplash
         /*METHODS*/
         public async Task gameStart()
         {
+            await channel.SendMessageAsync("Welcome to Quiplash! This bot will DM you two prompts, one at a time. Respond to each of them with whatever you think is funny. Your answer will be pitted against someone else, and you'll get points based on votes!");
+            await Task.Delay(15000);
+
             await round(1);
             await round(2);
             await round(3);
@@ -49,13 +52,13 @@ namespace DiscordQuiplash
                 }
             }
 
-            await channel.SendMessageAsync(players[winningIndex].User.Nickname + "wins!");
+            await channel.SendMessageAsync(players[winningIndex].User.Username + "wins!");
 
             var message = "FINAL SCORES\n\n";
 
             foreach (Player player in players)
             {
-                message += player.User.Nickname + ": " + player.Score + " points\n";
+                message += player.User.Username + ": " + player.Score + " points\n";
             }
 
             await channel.SendMessageAsync(message);
@@ -65,6 +68,23 @@ namespace DiscordQuiplash
 
         async Task round(int roundNumber)
         {
+            switch (roundNumber)
+            {
+                case 1:
+                    await channel.SendMessageAsync("This is round one! Prompts are worth 1000 points, wins are worth 500 points, and quiplashes are worth 1500 points.");
+                    break;
+                case 2:
+                    await channel.SendMessageAsync("This is round 2! Prompts are worth 2000 points, wins are worth 1000 points, and quiplashes are worth 3000 points.");
+                    break;
+                case 3:
+                    await channel.SendMessageAsync("This is round 3! This is the final round. Prompts are worth 3000 points, wins are worth 1500 points, and quiplashes are worth 4500 points.");
+                    break;
+                default:
+                    break;
+            }
+
+            await Task.Delay(10000);
+
             //create a random to use for prompt matching
             var random = new Random();
             //create list of prompts to use
@@ -102,7 +122,7 @@ namespace DiscordQuiplash
                 while (prompt.PlayerB == -1)
                 {
                     var playerBIndex = random.Next(playerAIndex + 1, players.Count);
-                    if (players[playerBIndex].PromptsRemaining == 0)
+                    if (players[playerBIndex].PromptsRemaining == 0 || playerBIndex == lastOpponent)
                     {
                         continue;
                     }
@@ -120,6 +140,7 @@ namespace DiscordQuiplash
 
             for (int i = 0; i < players.Count; i++)
             {
+                await channel.SendMessageAsync("It is " + players[i].User.Mention + "'s turn! Please check your DMs for a message from this account.");
                 await players[i].takeTurn(prompts, cts.Token, i);
             }
 
@@ -130,19 +151,20 @@ namespace DiscordQuiplash
                 var message = await channel.SendMessageAsync(prompt.ToString());
                 await message.AddReactionAsync(new Emoji("🇦"));
                 await message.AddReactionAsync(new Emoji("🇧"));
-                await Task.Delay(30000);
+                await Task.Delay(15000);
 
                 //get votes and determine score
+                await message.UpdateAsync();
                 var reactions = message.Reactions;
                 var aVotes = reactions.GetValueOrDefault(new Emoji("🇦")).ReactionCount - 1;
                 var bVotes = reactions.GetValueOrDefault(new Emoji("🇧")).ReactionCount - 1;
 
-                var aPoints = aVotes / (aVotes + bVotes) * 1000 * roundNumber;
-                var bPoints = bVotes / (aVotes + bVotes) * 1000 * roundNumber;
+                var aPoints = ((double)aVotes / (double)(aVotes + bVotes)) * 1000 * roundNumber;
+                var bPoints = ((double)bVotes / (double)(aVotes + bVotes)) * 1000 * roundNumber;
 
                 string resultMessage =
-                    "\"" + prompt.AnswerA + "\" -" + players[prompt.PlayerA].User.Nickname + " | " + aVotes + " votes (" + (aVotes / aVotes + bVotes) + "%)\n" +
-                    "\"" + prompt.AnswerB + "\" -" + players[prompt.PlayerB].User.Nickname + " | " + bVotes + " votes (" + (bVotes / aVotes + bVotes) + "%)\n\n";
+                    "\"" + prompt.AnswerA + "\" -" + players[prompt.PlayerA].User.Username + " | " + aVotes + " votes\n" +
+                    "\"" + prompt.AnswerB + "\" -" + players[prompt.PlayerB].User.Username + " | " + bVotes + " votes\n\n";
 
                 //finish the message
 
@@ -158,15 +180,15 @@ namespace DiscordQuiplash
                         aPoints += 1000 * roundNumber;
 
                         resultMessage +=
-                            players[prompt.PlayerA].User.Nickname + " got a quiplash for a total of " + aPoints + " points. (" + (1500 * roundNumber) + " point bonus for quiplash)\n" +
-                            players[prompt.PlayerB].User.Nickname + " earned " + bPoints + " points.";
+                            players[prompt.PlayerA].User.Username + " got a quiplash for a total of " + (int)aPoints + " points. (" + (1500 * roundNumber) + " point bonus for quiplash)\n" +
+                            players[prompt.PlayerB].User.Username + " earned " + (int)bPoints + " points.";
                     }
 
                     else
                     {
                         resultMessage +=
-                            players[prompt.PlayerA].User.Nickname + " earned " + aPoints + " points. (" + (500 * roundNumber) + " point bonus for winning)\n" +
-                            players[prompt.PlayerB].User.Nickname + " earned " + bPoints + " points.";
+                            players[prompt.PlayerA].User.Username + " earned " + (int)aPoints + " points. (" + (500 * roundNumber) + " point bonus for winning)\n" +
+                            players[prompt.PlayerB].User.Username + " earned " + (int)bPoints + " points.";
                     }
                 }
                 //b won
@@ -181,37 +203,37 @@ namespace DiscordQuiplash
                         bPoints += 1000 * roundNumber;
 
                         resultMessage +=
-                                                    players[prompt.PlayerA].User.Nickname + " earned " + aPoints + "points.\n" +
-                                                    players[prompt.PlayerB].User.Nickname + " got a quiplash for a total of " + bPoints + " points. (" + (1500 * roundNumber) + " point bonus for quiplash)";
+                            players[prompt.PlayerA].User.Username + " earned " + (int)aPoints + " points.\n" +
+                            players[prompt.PlayerB].User.Username + " got a quiplash for a total of " + (int)bPoints + " points. (" + (1500 * roundNumber) + " point bonus for quiplash)";
                     }
                     else
                     {
                         resultMessage +=
-                            players[prompt.PlayerA].User.Nickname + " earned " + aPoints + "points.\n" +
-                            players[prompt.PlayerB].User.Nickname + " earned " + bPoints + " points. (" + (500 * roundNumber) + " point bonus for winning)\n";
+                            players[prompt.PlayerA].User.Username + " earned " + (int)aPoints + "points.\n" +
+                            players[prompt.PlayerB].User.Username + " earned " + (int)bPoints + " points. (" + (500 * roundNumber) + " point bonus for winning)\n";
                     }
                 }
                 //draw
                 else
                 {
                     resultMessage +=
-                        players[prompt.PlayerA].User.Nickname + " earned " + aPoints + "points.\n" +
-                        players[prompt.PlayerB].User.Nickname + " earned " + bPoints + " points.";
+                        players[prompt.PlayerA].User.Username + " earned " + (int)aPoints + "points.\n" +
+                        players[prompt.PlayerB].User.Username + " earned " + (int)bPoints + " points.";
                 }
 
                 //add points to the players scores
-                players[prompt.PlayerA].Score += aPoints;
-                players[prompt.PlayerB].Score += bPoints;
+                players[prompt.PlayerA].Score += (int)aPoints;
+                players[prompt.PlayerB].Score += (int)bPoints;
 
                 await channel.SendMessageAsync(resultMessage);
-                await Task.Delay(10000);
+                await Task.Delay(5000);
             }
 
             string finalMessage = "Current Scores:\n\n";
 
             foreach (Player player in players)
             {
-                finalMessage += player.User.Nickname + ": " + player.Score + "\n";
+                finalMessage += player.User.Username + ": " + player.Score + "\n";
             }
 
             await channel.SendMessageAsync(finalMessage);
