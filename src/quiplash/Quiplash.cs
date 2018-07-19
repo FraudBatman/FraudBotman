@@ -209,7 +209,7 @@ namespace DiscordQuiplash
                     else
                     {
                         resultMessage +=
-                            players[prompt.PlayerA].User.Username + " earned " + (int)aPoints + "points.\n" +
+                            players[prompt.PlayerA].User.Username + " earned " + (int)aPoints + " points.\n" +
                             players[prompt.PlayerB].User.Username + " earned " + (int)bPoints + " points. (" + (500 * roundNumber) + " point bonus for winning)\n";
                     }
                 }
@@ -217,7 +217,7 @@ namespace DiscordQuiplash
                 else
                 {
                     resultMessage +=
-                        players[prompt.PlayerA].User.Username + " earned " + (int)aPoints + "points.\n" +
+                        players[prompt.PlayerA].User.Username + " earned " + (int)aPoints + " points.\n" +
                         players[prompt.PlayerB].User.Username + " earned " + (int)bPoints + " points.";
                 }
 

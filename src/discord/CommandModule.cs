@@ -87,7 +87,7 @@ namespace DiscordQuiplash
             //stay in the channel
             if (lobbyChannel != Context.Channel.Id && !told)
             {
-                await ReplyAsync("Due to Fraud being bad, only one game of quiplash can be played at a time");
+                await ReplyAsync("Due to Fraud being bad, only one game of Quiplash can be played at a time");
             }
 
             //just to give it something
