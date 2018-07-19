@@ -38,7 +38,7 @@ namespace DiscordQuiplash
             await Task.CompletedTask;
         }
 
-        public async Task round(int roundNumber)
+        async Task round(int roundNumber)
         {
             //create a random to use for prompt matching
             var random = new Random();
@@ -194,6 +194,12 @@ namespace DiscordQuiplash
 
             await channel.SendMessageAsync(finalMessage);
             await Task.Delay(10000);
+        }
+
+        /*PROPERTIES*/
+        public SocketTextChannel Channel
+        {
+            get { return channel; }
         }
     }
 }
