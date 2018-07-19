@@ -35,6 +35,31 @@ namespace DiscordQuiplash
             await round(1);
             await round(2);
             await round(3);
+
+            //determine winner
+            var winningIndex = 0;
+            var highScore = 0;
+
+            for (int i = 0; i < players.Count; i++)
+            {
+                if (players[i].Score > highScore)
+                {
+                    highScore = players[i].Score;
+                    winningIndex = i;
+                }
+            }
+
+            await channel.SendMessageAsync(players[winningIndex].User.Nickname + "wins!");
+
+            var message = "FINAL SCORES\n\n";
+
+            foreach (Player player in players)
+            {
+                message += player.User.Nickname + ": " + player.Score + " points\n";
+            }
+
+            await channel.SendMessageAsync(message);
+
             await Task.CompletedTask;
         }
 

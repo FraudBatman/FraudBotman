@@ -23,6 +23,7 @@ namespace DiscordQuiplash
                 lobbyChannel = Context.Channel.Id;
                 await ReplyAsync("A lobby has been started! The game will start in one minute. Type \".play\" if you'd like to join!");
 
+                users = new List<IUser>();
                 users.Add(Context.User);
 
                 await Task.Delay(60000);
@@ -42,6 +43,11 @@ namespace DiscordQuiplash
                     }
                     game = new Quiplash(Context.Client as DiscordSocketClient, Context.Channel as SocketTextChannel, players);
                     await game.gameStart();
+
+                    //clean
+                    game = null;
+                    lobbyChannel = 0;
+                    users = null;
                 }
             }
 
@@ -55,7 +61,11 @@ namespace DiscordQuiplash
             //join game
             if (Context.Channel.Id == lobbyChannel)
             {
-                if (users.Count == 8)
+                if (users.Contains(Context.User))
+                {
+                    await ReplyAsync("You are already in this game!");
+                }
+                else if (users.Count == 8)
                 {
                     await ReplyAsync("Sorry, there can only be 8 total players.");
                 }
