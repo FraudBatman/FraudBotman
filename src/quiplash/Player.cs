@@ -40,7 +40,7 @@ namespace DiscordQuiplash
                     if (prompt.PlayerA == playerID)
                     {
                         //send the prompt
-                        await responseChannel.SendMessageAsync(prompt.Question);
+                        await user.SendMessageAsync(prompt.Question);
 
                         //wait for response (see method CheckForResponse)
                         while (!responded)
@@ -52,7 +52,7 @@ namespace DiscordQuiplash
                     else if (prompt.PlayerB == playerID)
                     {
                         //send the prompt
-                        await responseChannel.SendMessageAsync(prompt.Question);
+                        await user.SendMessageAsync(prompt.Question);
 
                         //wait for response (see method CheckForResponse)
                         while (!responded)
@@ -73,7 +73,7 @@ namespace DiscordQuiplash
         private async Task CheckForResponse(SocketMessage msg)
         {
             //did the message recieved come from a dm?
-            if (msg.Channel.Id == responseChannel.Id)
+            if (msg.Channel.Id == user.GetOrCreateDMChannelAsync().GetAwaiter().GetResult().Id && !msg.Author.IsBot)
             {
                 //that means they responded
                 responded = true;

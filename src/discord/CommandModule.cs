@@ -9,9 +9,9 @@ namespace DiscordQuiplash
 {
     public class CommandModule : ModuleBase
     {
-        Quiplash game = null;
-        ulong lobbyChannel = 0;
-        List<IUser> users = null;
+        static Quiplash game = null;
+        static ulong lobbyChannel = 0;
+        static List<IUser> users = null;
 
         [Command("play", RunMode = RunMode.Async)]
         [Summary("creates a new Quiplash lobby in the channel, or joins one that has not started")]

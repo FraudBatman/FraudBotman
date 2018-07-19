@@ -85,12 +85,14 @@ namespace DiscordQuiplash
 
             //assign prompts to players
             int playerAIndex = 0;
+            int lastOpponent = -1;
             foreach (Prompt prompt in prompts)
             {
                 //make sure playerA has a prompt left
                 while (players[playerAIndex].PromptsRemaining == 0)
                 {
                     playerAIndex++;
+                    lastOpponent = -1;
                 }
 
                 prompt.PlayerA = playerAIndex;
@@ -106,6 +108,7 @@ namespace DiscordQuiplash
                     }
 
                     prompt.PlayerB = playerBIndex;
+                    lastOpponent = playerBIndex;
                 }
             }
 
@@ -117,28 +120,22 @@ namespace DiscordQuiplash
 
             for (int i = 0; i < players.Count; i++)
             {
-                players[i].takeTurn(prompts, cts.Token, i).GetAwaiter().GetResult();
+                await players[i].takeTurn(prompts, cts.Token, i);
             }
-
-            //wait 2 minutes for players to respond
-            await Task.Delay(120000);
-
-            //end everyone's turn if they didn't finish
-            cts.Cancel();
 
             //vote and scores for each prompt
             foreach (Prompt prompt in prompts)
             {
                 //send the prompt and let people vote
                 var message = await channel.SendMessageAsync(prompt.ToString());
-                await message.AddReactionAsync(new Emoji("🅰️"));
-                await message.AddReactionAsync(new Emoji("🅱️"));
+                await message.AddReactionAsync(new Emoji("🇦"));
+                await message.AddReactionAsync(new Emoji("🇧"));
                 await Task.Delay(30000);
 
                 //get votes and determine score
                 var reactions = message.Reactions;
-                var aVotes = reactions.GetValueOrDefault(new Emoji("🅰️")).ReactionCount - 1;
-                var bVotes = reactions.GetValueOrDefault(new Emoji("🅱️")).ReactionCount - 1;
+                var aVotes = reactions.GetValueOrDefault(new Emoji("🇦")).ReactionCount - 1;
+                var bVotes = reactions.GetValueOrDefault(new Emoji("🇧")).ReactionCount - 1;
 
                 var aPoints = aVotes / (aVotes + bVotes) * 1000 * roundNumber;
                 var bPoints = bVotes / (aVotes + bVotes) * 1000 * roundNumber;
