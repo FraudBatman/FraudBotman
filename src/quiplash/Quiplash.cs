@@ -132,9 +132,6 @@ namespace DiscordQuiplash
                 }
             }
 
-            //give players their turns
-            var responses = new List<Tuple<SocketGuildUser, string, string>>();
-
             //stuff for canceling when the time runs out
             var cts = new CancellationTokenSource();
 
