@@ -114,7 +114,7 @@ namespace DiscordQuiplash
         [Summary("lol")]
         public async Task WhoGay()
         {
-            await ReplyAsync("@Mythic Bitch#7950 is gay lol");
+            await ReplyAsync(Context.User.Mention + " is gay lol");
         }
     }
 }
