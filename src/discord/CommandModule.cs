@@ -42,6 +42,10 @@ namespace DiscordQuiplash
                 }
                 else
                 {
+                    await ReplyAsync("The lobby is now closed. If you didn't make it in, you can still vote!");
+
+                    await Task.Delay(5000);
+
                     var players = new List<SocketGuildUser>();
                     foreach (IUser user in users)
                     {
@@ -61,7 +65,7 @@ namespace DiscordQuiplash
             if (game != null && game.Channel.Id == Context.Channel.Id && !told)
             {
                 told = true;
-                await ReplyAsync("Unfortuantely, you can't join an ongoing game.");
+                await ReplyAsync("Unfortuantely, you can't join an ongoing game. You can still vote during the voting period, however!");
                 await Task.CompletedTask;
             }
 
