@@ -62,7 +62,6 @@ namespace DiscordQuiplash.Discord
         [Summary("Creates a new Quiplash lobby in the channel, or joins one that has not started.")]
         public async Task Play()
         {
-            bool told = false;
             GameLobby lobby = null;
 
             //check to see if lobby exists
@@ -79,6 +78,14 @@ namespace DiscordQuiplash.Discord
             {
                 //create it
                 lobbies.Add(new GameLobby(Context.Channel.Id, null));
+
+                //notify the channel
+                await ReplyAsync("A lobby has been started! The game will start in one minute. Type \".play\" if you'd like to join!");
+
+                await Task.Delay(30000);
+
+                await ReplyAsync("The game will start in 30 seconds! Be sure you've joined the game using \".play\"!");
+
             }
 
             //lobby exists
