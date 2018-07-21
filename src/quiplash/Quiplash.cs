@@ -174,6 +174,13 @@ namespace DiscordQuiplash
                 var aPoints = ((double)aVotes / (double)(aVotes + bVotes)) * 1000 * roundNumber;
                 var bPoints = ((double)bVotes / (double)(aVotes + bVotes)) * 1000 * roundNumber;
 
+                //to prevent div by zero errors affecting scores
+                if (aVotes + bVotes == 0)
+                {
+                    aPoints = 0;
+                    bPoints = 0;
+                }
+
                 string resultMessage =
                     "\"" + prompt.AnswerA + "\" -" + players[prompt.PlayerA].User.Username + " | " + aVotes + " votes\n" +
                     "\"" + prompt.AnswerB + "\" -" + players[prompt.PlayerB].User.Username + " | " + bVotes + " votes\n\n";
