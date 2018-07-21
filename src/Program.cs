@@ -11,7 +11,7 @@ namespace DiscordQuiplash
         /*MEMBERS*/
         DiscordSocketClient client = null;
         CommandHandler comhand = null;
-        string token = "MzA3Njc1MzI1NTAyODQ5MDI0.DjF0Fg.3k3E3jN0pMbDTPgNdEAkKIxCIH0";
+        string token = "";
 
         /*FUNCTIONS*/
 
