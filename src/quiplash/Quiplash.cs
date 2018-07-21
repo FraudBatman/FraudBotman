@@ -52,7 +52,7 @@ namespace DiscordQuiplash
                 }
             }
 
-            await channel.SendMessageAsync(players[winningIndex].User.Username + "wins!");
+            await channel.SendMessageAsync(players[winningIndex].User.Username + " wins!");
 
             var message = "FINAL SCORES\n\n";
 
@@ -135,15 +135,30 @@ namespace DiscordQuiplash
             //stuff for canceling when the time runs out
             var cts = new CancellationTokenSource();
 
+            //Do async so everyone get's their turn at once
             for (int i = 0; i < players.Count; i++)
             {
-                await channel.SendMessageAsync("It is " + players[i].User.Mention + "'s turn! Please check your DMs for a message from this account.");
-                await players[i].takeTurn(prompts, cts.Token, i);
+                players[i].takeTurn(prompts, cts.Token, i);
             }
+
+            //two minute timer
+            await Task.Delay(60000);
+
+            await channel.SendMessageAsync("One minute remaining!");
+
+            await Task.Delay(60000);
+
+            //force end of turn
+            cts.Cancel();
+
+            await channel.SendMessageAsync("Time is up! Prepare to vote!");
+
+            await Task.Delay(5000);
 
             //vote and scores for each prompt
             foreach (Prompt prompt in prompts)
             {
+                await channel.SendMessageAsync("----------");
                 //send the prompt and let people vote
                 var message = await channel.SendMessageAsync(prompt.ToString());
                 await message.AddReactionAsync(new Emoji("🇦"));
@@ -226,15 +241,20 @@ namespace DiscordQuiplash
                 await Task.Delay(5000);
             }
 
-            string finalMessage = "Current Scores:\n\n";
+            //skip giving scores on final round
+            if (roundNumber != 3)
 
-            foreach (Player player in players)
             {
-                finalMessage += player.User.Username + ": " + player.Score + "\n";
-            }
+                string finalMessage = "Current Scores:\n\n";
 
-            await channel.SendMessageAsync(finalMessage);
-            await Task.Delay(10000);
+                foreach (Player player in players)
+                {
+                    finalMessage += player.User.Username + ": " + player.Score + "\n";
+                }
+
+                await channel.SendMessageAsync(finalMessage);
+                await Task.Delay(10000);
+            }
         }
 
         /*PROPERTIES*/
