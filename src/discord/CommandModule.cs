@@ -1,23 +1,93 @@
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using DiscordQuiplash.Games;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 
-namespace DiscordQuiplash
+namespace DiscordQuiplash.Discord
 {
     public class CommandModule : ModuleBase
     {
+        /*REMOVED BECAUSE IRRELEVANT
         static Quiplash game = null;
         static ulong lobbyChannel = 0;
         static List<IUser> users = null;
+        */
 
+        static List<GameLobby> lobbies;
+
+        [Command("booptheheretic")]
+        [Summary("shhh him")]
+        public async Task BoopTheHeretic()
+        {
+            var channel = Context.Channel as SocketTextChannel;
+            await channel.SendMessageAsync("boop has nothing nice to say so shhh him\n-Allie, 2018");
+        }
+
+        [Command("help")]
+        [Summary("Lists all available commands")]
+        public async Task Help()
+        {
+
+            var commandService = new CommandService();
+            await commandService.AddModulesAsync(Assembly.GetEntryAssembly());
+
+            var commands = commandService.Commands;
+
+            var embed = new EmbedBuilder();
+            var normies = new EmbedFieldBuilder();
+
+            //normie commands
+            normies.Name = "Commands";
+
+            foreach (CommandInfo command in commands)
+            {
+                normies.Value += $"{command.Name}: {command.Summary}";
+            }
+
+            //add the field to the embed
+            embed.AddField(normies);
+
+            embed.Color = new Color(255, 255, 0);
+
+            await ReplyAsync("", false, embed);
+        }
+
+
+        /*CURRENTLY WORKING THIS TO SUPPORT MULTIPLE GAMES AT ONCE*/
         [Command("play", RunMode = RunMode.Async)]
-        [Summary("creates a new Quiplash lobby in the channel, or joins one that has not started")]
+        [Summary("Creates a new Quiplash lobby in the channel, or joins one that has not started.")]
         public async Task Play()
         {
             bool told = false;
+            GameLobby lobby = null;
+
+            //check to see if lobby exists
+            foreach (GameLobby checkLobby in lobbies)
+            {
+                if (checkLobby.ChannelID == Context.Channel.Id)
+                {
+                    lobby = checkLobby;
+                }
+            }
+
+            //lobby doesn't exist
+            if (lobby == null)
+            {
+                //create it
+                lobbies.Add(new GameLobby(Context.Channel.Id, null));
+            }
+
+            //lobby exists
+            else
+            {
+
+            }
+
+            /*REMOVED BECAUSE IRRELEVANT
             //create game
             if (lobbyChannel == 0)
             {
@@ -60,6 +130,7 @@ namespace DiscordQuiplash
                     users = null;
                 }
             }
+            
 
             //game already started
             if (game != null && game.Channel.Id == Context.Channel.Id && !told)
@@ -93,6 +164,7 @@ namespace DiscordQuiplash
             {
                 await ReplyAsync("Due to Fraud being bad, only one game of Quiplash can be played at a time");
             }
+            */
 
             //just to give it something
             await Task.CompletedTask;
@@ -103,15 +175,7 @@ namespace DiscordQuiplash
         public async Task PrincesaAllie()
         {
             var channel = Context.Channel as SocketTextChannel;
-            await channel.SendMessageAsync("ALL HAIL PRINCESS @Alliex92#5761 :crown:");
-        }
-
-        [Command("booptheheretic")]
-        [Summary("He not")]
-        public async Task BoopTheHeretic()
-        {
-            var channel = Context.Channel as SocketTextChannel;
-            await channel.SendMessageAsync("boop has nothing nice to say so shhh him");
+            await channel.SendMessageAsync("ALL HAIL KING ALLIE :crown:");
         }
 
         [Command("whogay")]

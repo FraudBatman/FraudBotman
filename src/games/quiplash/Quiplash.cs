@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DiscordQuiplash
+namespace DiscordQuiplash.Games.Quiplash
 {
-    class Quiplash
+    class Quiplash : Game
     {
         /*MEMBERS*/
         DiscordSocketClient client = null;

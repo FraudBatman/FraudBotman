@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace DiscordQuiplash
+namespace DiscordQuiplash.Games.Quiplash
 {
     class Prompt
     {

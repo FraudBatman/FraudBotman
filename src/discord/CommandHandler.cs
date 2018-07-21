@@ -3,7 +3,7 @@ using Discord.WebSocket;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace DiscordQuiplash
+namespace DiscordQuiplash.Discord
 {
     class CommandHandler
     {
