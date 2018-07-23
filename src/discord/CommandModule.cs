@@ -17,7 +17,7 @@ namespace DiscordQuiplash.Discord
         static List<IUser> users = null;
         */
 
-        static List<GameLobby> lobbies;
+        static List<GameLobby> lobbies = new List<GameLobby>();
 
         [Command("booptheheretic")]
         [Summary("shhh him")]
