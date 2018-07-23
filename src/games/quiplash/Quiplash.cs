@@ -17,6 +17,8 @@ namespace DiscordQuiplash.Games.Quiplash
         /*CONSTRUCTORS*/
         public Quiplash(DiscordSocketClient socketClient, SocketTextChannel gameChannel, List<SocketGuildUser> users)
         {
+            MinimumPlayers = 3;
+            Name = "Quiplash";
             client = socketClient;
             channel = gameChannel;
 
@@ -30,7 +32,7 @@ namespace DiscordQuiplash.Games.Quiplash
         }
 
         /*METHODS*/
-        public async Task gameStart()
+        public override async Task Start()
         {
             await channel.SendMessageAsync("Welcome to Quiplash! This bot will DM you two prompts, one at a time. Respond to each of them with whatever you think is funny. Your answer will be pitted against someone else, and you'll get points based on votes!\nYou will have two minutes to respond to both prompts.");
             await Task.Delay(15000);

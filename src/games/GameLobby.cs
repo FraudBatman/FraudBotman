@@ -1,5 +1,6 @@
 using Discord;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DiscordQuiplash.Games
 {
@@ -25,7 +26,7 @@ namespace DiscordQuiplash.Games
         /*METHODS*/
         public void StartGame()
         {
-
+            game.Start();
         }
 
         /*PROPERTIES*/

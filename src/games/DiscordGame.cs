@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 namespace DiscordQuiplash.Games
 {
     public class DiscordGame
@@ -24,6 +25,12 @@ namespace DiscordQuiplash.Games
             {
                 return false;
             }
+        }
+
+        /*METHODS*/
+        public virtual Task Start()
+        {
+            return Task.CompletedTask;
         }
 
         public int MinimumPlayers
