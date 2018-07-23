@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using DiscordQuiplash.Discord;
 using System;
 using System.IO;
 using System.Threading.Tasks;

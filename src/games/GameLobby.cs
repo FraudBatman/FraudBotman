@@ -8,11 +8,11 @@ namespace DiscordQuiplash.Games
         /*MEMBERS*/
         ulong channelId;
         List<IUser> players;
-        Game game;
+        DiscordGame game;
         bool joinable;
 
         /*CONSTRUCTORS*/
-        public GameLobby(ulong channelID, Game chosenGame, bool CanJoin = true)
+        public GameLobby(ulong channelID, DiscordGame chosenGame, bool CanJoin = true)
         {
             channelId = channelID;
             players = new List<IUser>();
@@ -33,7 +33,7 @@ namespace DiscordQuiplash.Games
             set { players = value; }
         }
 
-        public Game LobbyGame
+        public DiscordGame LobbyGame
         {
             get { return game; }
             set { game = value; }

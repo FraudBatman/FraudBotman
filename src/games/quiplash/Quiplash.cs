@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DiscordQuiplash.Games.Quiplash
 {
-    class Quiplash : Game
+    class Quiplash : DiscordGame
     {
         /*MEMBERS*/
         DiscordSocketClient client = null;
