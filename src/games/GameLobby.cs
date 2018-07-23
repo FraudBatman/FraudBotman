@@ -32,7 +32,7 @@ namespace DiscordQuiplash.Games
 
         public async Task StartGame()
         {
-            await game.Start();
+            await game.Start(players);
         }
 
         /*PROPERTIES*/

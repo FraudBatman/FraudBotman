@@ -72,6 +72,10 @@ namespace DiscordQuiplash.Games.Quiplash
                 await user.SendMessageAsync("Time is up! Please return to the game channel.");
                 await Task.CompletedTask;
             }
+            catch (Exception err)
+            {
+                await responseChannel.SendMessageAsync(err.ToString());
+            }
         }
 
         private async Task CheckForResponse(SocketMessage msg)

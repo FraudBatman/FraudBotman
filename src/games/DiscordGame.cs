@@ -1,3 +1,4 @@
+using Discord;
 using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,7 @@ namespace DiscordQuiplash.Games
             name = name.ToUpperInvariant();
             if (name == "QUIPLASH")
             {
-                return new Quiplash.Quiplash(lobby.Client as DiscordSocketClient, lobby.Channel as SocketTextChannel, lobby.Players);
+                return new Quiplash.Quiplash(lobby.Client as DiscordSocketClient, lobby.Channel as SocketTextChannel);
             }
             else
             {
@@ -43,7 +44,7 @@ namespace DiscordQuiplash.Games
         }
 
         /*METHODS*/
-        public virtual Task Start()
+        public virtual Task Start(List<IUser> users)
         {
             return Task.CompletedTask;
         }
