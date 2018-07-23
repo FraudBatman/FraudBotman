@@ -62,152 +62,162 @@ namespace DiscordQuiplash.Discord
         [Summary("Creates a new Quiplash lobby in the channel, or joins one that has not started.")]
         public async Task Play(string gameName = "Quiplash")
         {
-            if (!DiscordGame.GameExists(gameName) && gameName != null)
+            try
             {
-                await ReplyAsync("That game doesn't exist.");
-                return;
-            }
-            GameLobby lobby = null;
-
-            //check to see if lobby exists
-            foreach (GameLobby checkLobby in lobbies)
-            {
-                if (checkLobby.Channel.Id == Context.Channel.Id)
+                if (!DiscordGame.GameExists(gameName) && gameName != null)
                 {
-                    lobby = checkLobby;
+                    await ReplyAsync("That game doesn't exist.");
+                    return;
                 }
-            }
+                GameLobby lobby = null;
 
-            //lobby doesn't exist
-            if (lobby == null)
-            {
-                //create lobby and game
-                lobbies.Add(new GameLobby(Context.Client, Context.Channel, new DiscordGame()));
-
-                //notify the channel
-                await ReplyAsync("A lobby has been started! The game will start in one minute. Type \".play\" if you'd like to join!");
-
-                await Task.Delay(30000);
-
-                await ReplyAsync("The game will start in 30 seconds! Be sure you've joined the game using \".play\"!");
-
-                await Task.Delay(30000);
-
-                lobby.Joinable = false;
-
-                //not enough players
-                if (lobby.Players.Count < lobby.LobbyGame.MinimumPlayers)
+                //check to see if lobby exists
+                foreach (GameLobby checkLobby in lobbies)
                 {
-                    await ReplyAsync($"Sorry, you need at least {lobby.LobbyGame.MinimumPlayers} people to play {lobby.LobbyGame.Name}.");
-                }
-
-                //get the game started
-                else
-                {
-                    lobby.StartGame();
-                    lobbies.Remove(lobby);
-                }
-            }
-
-            //lobby exists
-            else
-            {
-                if (lobby.Joinable && !lobby.Players.Contains(Context.User))
-                {
-                    lobby.Players.Add(Context.User);
-                    await ReplyAsync($"{Context.User.Mention} has joined the game!");
-                }
-                else if (lobby.Players.Contains(Context.User))
-                {
-                    await ReplyAsync("You already joined this game!");
-                }
-                else
-                {
-                    await ReplyAsync("Sorry, you can't join this game.");
-                }
-            }
-
-            /*REMOVED BECAUSE IRRELEVANT
-            //create game
-            if (lobbyChannel == 0)
-            {
-                told = true;
-                lobbyChannel = Context.Channel.Id;
-                await ReplyAsync("A lobby has been started! The game will start in one minute. Type \".play\" if you'd like to join!");
-
-                users = new List<IUser>();
-                users.Add(Context.User);
-
-                await Task.Delay(30000);
-
-                await ReplyAsync("The game will start in 30 seconds! Be sure you've joined the game using \".play\"!");
-
-                await Task.Delay(30000);
-
-                if (users.Count < 3)
-                {
-                    await ReplyAsync("Sorry, you need at least 3 players to play Quiplash.");
-                    lobbyChannel = 0;
-                    users = null;
-                }
-                else
-                {
-                    await ReplyAsync("The lobby is now closed. If you didn't make it in, you can still vote!");
-
-                    await Task.Delay(5000);
-
-                    var players = new List<SocketGuildUser>();
-                    foreach (IUser user in users)
+                    if (checkLobby.Channel.Id == Context.Channel.Id)
                     {
-                        players.Add(user as SocketGuildUser);
+                        lobby = checkLobby;
                     }
-                    game = new Quiplash(Context.Client as DiscordSocketClient, Context.Channel as SocketTextChannel, players);
-                    await game.gameStart();
-
-                    //clean
-                    game = null;
-                    lobbyChannel = 0;
-                    users = null;
                 }
-            }
-            
 
-            //game already started
-            if (game != null && game.Channel.Id == Context.Channel.Id && !told)
-            {
-                told = true;
-                await ReplyAsync("Unfortuantely, you can't join an ongoing game. You can still vote during the voting period, however!");
+                //lobby doesn't exist
+                if (lobby == null)
+                {
+                    //create lobby and game
+                    lobbies.Add(new GameLobby(Context.Client, Context.Channel, new DiscordGame()));
+
+                    lobby.Players.Add(Context.User);
+
+                    //notify the channel
+                    await ReplyAsync("A lobby has been started! The game will start in one minute. Type \".play\" if you'd like to join!");
+
+                    await Task.Delay(30000);
+
+                    await ReplyAsync("The game will start in 30 seconds! Be sure you've joined the game using \".play\"!");
+
+                    await Task.Delay(30000);
+
+                    lobby.Joinable = false;
+
+                    //not enough players
+                    if (lobby.Players.Count < lobby.LobbyGame.MinimumPlayers)
+                    {
+                        await ReplyAsync($"Sorry, you need at least {lobby.LobbyGame.MinimumPlayers} people to play {lobby.LobbyGame.Name}.");
+                        lobbies.Remove(lobby);
+                    }
+
+                    //get the game started
+                    else
+                    {
+                        await lobby.StartGame();
+                        lobbies.Remove(lobby);
+                    }
+                }
+
+                //lobby exists
+                else
+                {
+                    if (lobby.Joinable && !lobby.Players.Contains(Context.User))
+                    {
+                        lobby.Players.Add(Context.User);
+                        await ReplyAsync($"{Context.User.Mention} has joined the game!");
+                    }
+                    else if (lobby.Players.Contains(Context.User))
+                    {
+                        await ReplyAsync("You already joined this game!");
+                    }
+                    else
+                    {
+                        await ReplyAsync("Sorry, you can't join this game.");
+                    }
+                }
+
+                /*REMOVED BECAUSE IRRELEVANT
+                //create game
+                if (lobbyChannel == 0)
+                {
+                    told = true;
+                    lobbyChannel = Context.Channel.Id;
+                    await ReplyAsync("A lobby has been started! The game will start in one minute. Type \".play\" if you'd like to join!");
+
+                    users = new List<IUser>();
+                    users.Add(Context.User);
+
+                    await Task.Delay(30000);
+
+                    await ReplyAsync("The game will start in 30 seconds! Be sure you've joined the game using \".play\"!");
+
+                    await Task.Delay(30000);
+
+                    if (users.Count < 3)
+                    {
+                        await ReplyAsync("Sorry, you need at least 3 players to play Quiplash.");
+                        lobbyChannel = 0;
+                        users = null;
+                    }
+                    else
+                    {
+                        await ReplyAsync("The lobby is now closed. If you didn't make it in, you can still vote!");
+
+                        await Task.Delay(5000);
+
+                        var players = new List<SocketGuildUser>();
+                        foreach (IUser user in users)
+                        {
+                            players.Add(user as SocketGuildUser);
+                        }
+                        game = new Quiplash(Context.Client as DiscordSocketClient, Context.Channel as SocketTextChannel, players);
+                        await game.gameStart();
+
+                        //clean
+                        game = null;
+                        lobbyChannel = 0;
+                        users = null;
+                    }
+                }
+
+
+                //game already started
+                if (game != null && game.Channel.Id == Context.Channel.Id && !told)
+                {
+                    told = true;
+                    await ReplyAsync("Unfortuantely, you can't join an ongoing game. You can still vote during the voting period, however!");
+                    await Task.CompletedTask;
+                }
+
+                //join game
+                if (Context.Channel.Id == lobbyChannel && !told)
+                {
+                    told = true;
+                    if (users.Contains(Context.User))
+                    {
+                        await ReplyAsync("You are already in this game!");
+                    }
+                    else if (users.Count == 8)
+                    {
+                        await ReplyAsync("Sorry, there can only be 8 total players.");
+                    }
+                    else
+                    {
+                        await ReplyAsync(Context.User.Mention + " has joined the game!");
+                        users.Add(Context.User);
+                    }
+                }
+
+                //stay in the channel
+                if (lobbyChannel != Context.Channel.Id && !told)
+                {
+                    await ReplyAsync("Due to Fraud being bad, only one game of Quiplash can be played at a time");
+                }
+                */
+
+                //just to give it something
                 await Task.CompletedTask;
             }
-
-            //join game
-            if (Context.Channel.Id == lobbyChannel && !told)
+            catch (Exception err)
             {
-                told = true;
-                if (users.Contains(Context.User))
-                {
-                    await ReplyAsync("You are already in this game!");
-                }
-                else if (users.Count == 8)
-                {
-                    await ReplyAsync("Sorry, there can only be 8 total players.");
-                }
-                else
-                {
-                    await ReplyAsync(Context.User.Mention + " has joined the game!");
-                    users.Add(Context.User);
-                }
+                await ReplyAsync(err.ToString());
             }
-
-            //stay in the channel
-            if (lobbyChannel != Context.Channel.Id && !told)
-            {
-                await ReplyAsync("Due to Fraud being bad, only one game of Quiplash can be played at a time");
-            }
-            */
-
-            //just to give it something
-            await Task.CompletedTask;
         }
 
         [Command("reyallie")]

@@ -30,9 +30,9 @@ namespace DiscordQuiplash.Games
             set { client = value; }
         }
 
-        public void StartGame()
+        public async Task StartGame()
         {
-            game.Start();
+            await game.Start();
         }
 
         /*PROPERTIES*/
