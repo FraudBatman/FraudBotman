@@ -29,7 +29,7 @@ namespace DiscordQuiplash.Games
         }
 
         /*CONSTRUCTOR*/
-        public DiscordGame ConstructGame(string name, GameLobby lobby)
+        public static DiscordGame ConstructGame(string name, GameLobby lobby)
         {
             name = name.ToUpperInvariant();
             if (name == "QUIPLASH")
