@@ -15,7 +15,7 @@ namespace DiscordQuiplash.Games.Quiplash
         List<Player> players = null;
 
         /*CONSTRUCTORS*/
-        public Quiplash(DiscordSocketClient socketClient, SocketTextChannel gameChannel, List<SocketGuildUser> users)
+        public Quiplash(DiscordSocketClient socketClient, SocketTextChannel gameChannel, List<IUser> users)
         {
             MinimumPlayers = 3;
             Name = "Quiplash";

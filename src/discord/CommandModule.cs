@@ -72,7 +72,7 @@ namespace DiscordQuiplash.Discord
             //check to see if lobby exists
             foreach (GameLobby checkLobby in lobbies)
             {
-                if (checkLobby.ChannelID == Context.Channel.Id)
+                if (checkLobby.Channel.Id == Context.Channel.Id)
                 {
                     lobby = checkLobby;
                 }
@@ -82,7 +82,7 @@ namespace DiscordQuiplash.Discord
             if (lobby == null)
             {
                 //create lobby and game
-                lobbies.Add(new GameLobby(Context.Client, Context.Channel.Id, new DiscordGame()));
+                lobbies.Add(new GameLobby(Context.Client, Context.Channel, new DiscordGame()));
 
                 //notify the channel
                 await ReplyAsync("A lobby has been started! The game will start in one minute. Type \".play\" if you'd like to join!");

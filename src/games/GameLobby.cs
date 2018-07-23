@@ -4,36 +4,42 @@ using System.Threading.Tasks;
 
 namespace DiscordQuiplash.Games
 {
-    class GameLobby
+    public class GameLobby
     {
         /*MEMBERS*/
         IDiscordClient client;
-        ulong channelId;
+        IMessageChannel gameChannel;
         List<IUser> players;
         DiscordGame game;
         bool joinable;
 
         /*CONSTRUCTORS*/
-        public GameLobby(IDiscordClient iDiscordClient, ulong channelID, DiscordGame chosenGame, bool CanJoin = true)
+        public GameLobby(IDiscordClient iDiscordClient, IMessageChannel channel, DiscordGame chosenGame, bool CanJoin = true)
         {
             client = iDiscordClient;
-            channelId = channelID;
+            gameChannel = channel;
             players = new List<IUser>();
             game = chosenGame;
             joinable = CanJoin;
         }
 
         /*METHODS*/
+        public IDiscordClient Client
+        {
+            get { return client; }
+            set { client = value; }
+        }
+
         public void StartGame()
         {
             game.Start();
         }
 
         /*PROPERTIES*/
-        public ulong ChannelID
+        public IMessageChannel Channel
         {
-            get { return channelId; }
-            set { channelId = value; }
+            get { return gameChannel; }
+            set { gameChannel = value; }
         }
 
         public List<IUser> Players

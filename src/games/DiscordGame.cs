@@ -1,3 +1,4 @@
+using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -24,6 +25,20 @@ namespace DiscordQuiplash.Games
             else
             {
                 return false;
+            }
+        }
+
+        /*CONSTRUCTOR*/
+        public DiscordGame ConstructGame(string name, GameLobby lobby)
+        {
+            name = name.ToUpperInvariant();
+            if (name == "QUIPLASH")
+            {
+                return new Quiplash.Quiplash(lobby.Client as DiscordSocketClient, lobby.Channel as SocketTextChannel, lobby.Players);
+            }
+            else
+            {
+                return null;
             }
         }
 
