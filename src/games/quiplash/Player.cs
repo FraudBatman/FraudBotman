@@ -12,14 +12,14 @@ namespace DiscordQuiplash.Games.Quiplash
         /*MEMBERS*/
         DiscordSocketClient client = null;
         SocketTextChannel responseChannel = null;
-        SocketGuildUser user = null;
+        IUser user = null;
         int score = 0;
         int promptsRemaining = 2;
         bool responded = false;
         string response = "";
 
         /*CONSTRUCTORS*/
-        public Player(DiscordSocketClient socketClient, SocketTextChannel socketChannel, SocketGuildUser socketUser)
+        public Player(DiscordSocketClient socketClient, SocketTextChannel socketChannel, IUser socketUser)
         {
             client = socketClient;
             responseChannel = socketChannel;
@@ -64,10 +64,12 @@ namespace DiscordQuiplash.Games.Quiplash
                         prompt.AnswerB = response;
                     }
                 }
+                await user.SendMessageAsync("That's all! Please return to the game channel.");
                 await Task.CompletedTask;
             }
             catch (OperationCanceledException)
             {
+                await user.SendMessageAsync("Time is up! Please return to the game channel.");
                 await Task.CompletedTask;
             }
         }
@@ -91,7 +93,7 @@ namespace DiscordQuiplash.Games.Quiplash
             set { responseChannel = value; }
         }
 
-        public SocketGuildUser User
+        public IUser User
         {
             get { return user; }
             set { user = value; }

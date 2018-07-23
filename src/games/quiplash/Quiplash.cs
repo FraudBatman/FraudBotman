@@ -25,7 +25,7 @@ namespace DiscordQuiplash.Games.Quiplash
             //convert users to players
             players = new List<Player>();
 
-            foreach (SocketGuildUser user in users)
+            foreach (IUser user in users)
             {
                 players.Add(new Player(client, channel, user));
             }
