@@ -129,6 +129,7 @@ namespace DiscordQuiplash
 
                     prompt.PlayerB = playerBIndex;
                     lastOpponent = playerBIndex;
+                    players[playerBIndex].PromptsRemaining--;
                 }
             }
 
