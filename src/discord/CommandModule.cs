@@ -77,8 +77,7 @@ namespace DiscordQuiplash.Discord
             if (lobby == null)
             {
                 //create lobby and game
-                var game = new DiscordGame();
-                lobbies.Add(new GameLobby(Context.Channel.Id, game));
+                lobbies.Add(new GameLobby(Context.Client, Context.Channel.Id, new DiscordGame()));
 
                 //notify the channel
                 await ReplyAsync("A lobby has been started! The game will start in one minute. Type \".play\" if you'd like to join!");
@@ -89,9 +88,17 @@ namespace DiscordQuiplash.Discord
 
                 await Task.Delay(30000);
 
+                //not enough players
                 if (lobby.Players.Count < lobby.LobbyGame.MinimumPlayers)
                 {
-                    await ReplyAsync($"Sorry, you need at least {} people to play ")
+                    await ReplyAsync($"Sorry, you need at least {lobby.LobbyGame.MinimumPlayers} people to play {lobby.LobbyGame.Name}.");
+                }
+
+                //get the game started
+                else
+                {
+                    lobby.StartGame();
+                    lobbies.Remove(lobby);
                 }
             }
 

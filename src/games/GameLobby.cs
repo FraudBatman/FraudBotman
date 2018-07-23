@@ -6,18 +6,26 @@ namespace DiscordQuiplash.Games
     class GameLobby
     {
         /*MEMBERS*/
+        IDiscordClient client;
         ulong channelId;
         List<IUser> players;
         DiscordGame game;
         bool joinable;
 
         /*CONSTRUCTORS*/
-        public GameLobby(ulong channelID, DiscordGame chosenGame, bool CanJoin = true)
+        public GameLobby(IDiscordClient iDiscordClient, ulong channelID, DiscordGame chosenGame, bool CanJoin = true)
         {
+            client = iDiscordClient;
             channelId = channelID;
             players = new List<IUser>();
             game = chosenGame;
             joinable = CanJoin;
+        }
+
+        /*METHODS*/
+        public void StartGame()
+        {
+
         }
 
         /*PROPERTIES*/
