@@ -45,7 +45,7 @@ namespace DiscordQuiplash.Discord
 
             foreach (CommandInfo command in commands)
             {
-                normies.Value += $"{command.Name}: {command.Summary}";
+                normies.Value += $"{command.Name}: {command.Summary}\n";
             }
 
             //add the field to the embed
