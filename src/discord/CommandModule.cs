@@ -84,7 +84,8 @@ namespace DiscordQuiplash.Discord
                 if (lobby == null)
                 {
                     //create lobby and game
-                    lobbies.Add(new GameLobby(Context.Client, Context.Channel, new DiscordGame()));
+                    lobby = new GameLobby(Context.Client, Context.Channel, new DiscordGame());
+                    lobbies.Add(lobby);
 
                     lobby.Players.Add(Context.User);
 
