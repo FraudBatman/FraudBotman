@@ -60,8 +60,13 @@ namespace DiscordQuiplash.Discord
         /*CURRENTLY WORKING THIS TO SUPPORT MULTIPLE GAMES AT ONCE*/
         [Command("play", RunMode = RunMode.Async)]
         [Summary("Creates a new Quiplash lobby in the channel, or joins one that has not started.")]
-        public async Task Play()
+        public async Task Play(string gameName = "Quiplash")
         {
+            if (!DiscordGame.GameExists(gameName) && gameName != null)
+            {
+                await ReplyAsync("That game doesn't exist.");
+                return;
+            }
             GameLobby lobby = null;
 
             //check to see if lobby exists
@@ -88,6 +93,8 @@ namespace DiscordQuiplash.Discord
 
                 await Task.Delay(30000);
 
+                lobby.Joinable = false;
+
                 //not enough players
                 if (lobby.Players.Count < lobby.LobbyGame.MinimumPlayers)
                 {
@@ -105,7 +112,19 @@ namespace DiscordQuiplash.Discord
             //lobby exists
             else
             {
-
+                if (lobby.Joinable && !lobby.Players.Contains(Context.User))
+                {
+                    lobby.Players.Add(Context.User);
+                    await ReplyAsync($"{Context.User.Mention} has joined the game!");
+                }
+                else if (lobby.Players.Contains(Context.User))
+                {
+                    await ReplyAsync("You already joined this game!");
+                }
+                else
+                {
+                    await ReplyAsync("Sorry, you can't join this game.");
+                }
             }
 
             /*REMOVED BECAUSE IRRELEVANT
