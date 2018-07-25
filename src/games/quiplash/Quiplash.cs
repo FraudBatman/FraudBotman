@@ -79,7 +79,8 @@ namespace DiscordQuiplash.Games.Quiplash
                         await channel.SendMessageAsync("This is round 2! Prompts are worth 2000 points, wins are worth 1000 points, and quiplashes are worth 3000 points.");
                         break;
                     case 3:
-                        await channel.SendMessageAsync("This is round 3! This is the final round. Prompts are worth 3000 points, wins are worth 1500 points, and quiplashes are worth 4500 points.");
+                        await channel.SendMessageAsync("This is round 3! This is the final round. Prompts are worth 3000 points, wins are worth 1500 points, and quiplashes are worth 4500 points. Also, as a last round addition, your answer from prompt 1 will be copied into prompt 2!");
+                        await Task.Delay(5000);
                         break;
                     default:
                         break;
@@ -138,10 +139,22 @@ namespace DiscordQuiplash.Games.Quiplash
                 //stuff for canceling when the time runs out
                 var cts = new CancellationTokenSource();
 
-                //Do async so everyone get's their turn at once
-                for (int i = 0; i < players.Count; i++)
+
+                //round 3 special turn
+                if (roundNumber == 3)
                 {
-                    players[i].takeTurn(prompts, cts.Token, i);
+                    for (int i = 0; i < players.Count; i++)
+                    {
+                        players[i].lastTurn(prompts, cts.Token, i);
+                    }
+                }
+                else
+                {
+                    //Do async so everyone get's their turn at once
+                    for (int i = 0; i < players.Count; i++)
+                    {
+                        players[i].takeTurn(prompts, cts.Token, i);
+                    }
                 }
 
                 //two minute timer

@@ -79,6 +79,66 @@ namespace DiscordQuiplash.Games.Quiplash
             }
         }
 
+        public async Task lastTurn(List<Prompt> prompts, CancellationToken ct, int playerID)
+        {
+            try
+            {
+                await user.SendMessageAsync("Please answer the following prompt as best as you can. Your answer will be carried over to a secret 2nd prompt.");
+
+                //set responded off and clear response
+                responded = false;
+                response = "";
+
+                //connect message being recieved to response checking
+                client.MessageReceived += CheckForResponse;
+                foreach (Prompt prompt in prompts)
+                {
+                    if (prompt.PlayerA == playerID)
+                    {
+                        if (!responded)
+                        {
+                            //send the prompt
+                            await user.SendMessageAsync(prompt.Question);
+                        }
+
+                        //wait for response (see method CheckForResponse)
+                        while (!responded)
+                        {
+                            await Task.Delay(1);
+                        }
+                        prompt.AnswerA = response;
+                        break;
+                    }
+                    else if (prompt.PlayerB == playerID && !responded)
+                    {
+                        if (!responded)
+                        {
+                            //send the prompt
+                            await user.SendMessageAsync(prompt.Question);
+                        }
+
+                        //wait for response (see method CheckForResponse)
+                        while (!responded)
+                        {
+                            await Task.Delay(1);
+                        }
+                        prompt.AnswerB = response;
+                    }
+                }
+                await user.SendMessageAsync("That's all! Please return to the game channel.");
+                await Task.CompletedTask;
+            }
+            catch (OperationCanceledException)
+            {
+                await user.SendMessageAsync("Time is up! Please return to the game channel.");
+                await Task.CompletedTask;
+            }
+            catch (Exception err)
+            {
+                await responseChannel.SendMessageAsync(err.ToString());
+            }
+        }
+
         private async Task CheckForResponse(SocketMessage msg)
         {
             //did the message recieved come from a dm, is not from botman, and isn't the last response?
