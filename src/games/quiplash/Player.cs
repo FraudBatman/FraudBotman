@@ -17,6 +17,7 @@ namespace DiscordQuiplash.Games.Quiplash
         int promptsRemaining = 2;
         bool responded = false;
         string response = "";
+        ulong lastResponse = 0;
 
         /*CONSTRUCTORS*/
         public Player(DiscordSocketClient socketClient, SocketTextChannel socketChannel, IUser socketUser)
@@ -80,12 +81,15 @@ namespace DiscordQuiplash.Games.Quiplash
 
         private async Task CheckForResponse(SocketMessage msg)
         {
-            //did the message recieved come from a dm?
-            if (msg.Channel.Id == user.GetOrCreateDMChannelAsync().GetAwaiter().GetResult().Id && !msg.Author.IsBot)
+            //did the message recieved come from a dm, is not from botman, and isn't the last response?
+            if (msg.Channel.Id == user.GetOrCreateDMChannelAsync().GetAwaiter().GetResult().Id && !msg.Author.IsBot && msg.Id != lastResponse)
             {
                 //that means they responded
                 responded = true;
                 response = msg.Content;
+
+                //prevent answer duplication bug
+                lastResponse = msg.Id;
             }
             await Task.CompletedTask;
         }
