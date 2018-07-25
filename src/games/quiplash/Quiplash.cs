@@ -187,6 +187,32 @@ namespace DiscordQuiplash.Games.Quiplash
                     var aVotes = reactions.GetValueOrDefault(new Emoji("🇦")).ReactionCount - 1;
                     var bVotes = reactions.GetValueOrDefault(new Emoji("🇧")).ReactionCount - 1;
 
+                    //check both responses for author votes
+
+                    //this is answer a
+                    var voters = message.GetReactionUsersAsync("🇦").GetAwaiter().GetResult().GetEnumerator();
+                    do
+                    {
+                        //check if voter is the owner of response A
+                        if (voters.Current == players[prompt.PlayerA].User)
+                        {
+                            aVotes--;
+                            break;
+                        }
+                    } while (!voters.MoveNext());
+
+                    //this is answer b
+                    voters = message.GetReactionUsersAsync("🇧").GetAwaiter().GetResult().GetEnumerator();
+                    do
+                    {
+                        //check if voter is the owner of response A
+                        if (voters.Current == players[prompt.PlayerB].User)
+                        {
+                            bVotes--;
+                            break;
+                        }
+                    } while (!voters.MoveNext());
+
                     var aPoints = ((double)aVotes / (double)(aVotes + bVotes)) * 1000 * roundNumber;
                     var bPoints = ((double)bVotes / (double)(aVotes + bVotes)) * 1000 * roundNumber;
 
