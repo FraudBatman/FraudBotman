@@ -109,6 +109,8 @@ namespace DiscordQuiplash.Games.Quiplash
                 //assign prompts to players
                 int playerAIndex = 0;
                 int lastOpponent = -1;
+
+
                 foreach (Prompt prompt in prompts)
                 {
                     //make sure playerA has a prompt left
@@ -124,8 +126,22 @@ namespace DiscordQuiplash.Games.Quiplash
                     //does this process till the prompt is full
                     while (prompt.PlayerB == -1)
                     {
+                        //determine who to pick
+                        bool twoExists = false;
+                        foreach (Player player in players)
+                        {
+                            if (player.PromptsRemaining == 2)
+                                twoExists = true;
+                        }
+
+
                         var playerBIndex = random.Next(playerAIndex + 1, players.Count);
                         if (players[playerBIndex].PromptsRemaining == 0 || playerBIndex == lastOpponent)
+                        {
+                            continue;
+                        }
+
+                        if (players[playerBIndex].PromptsRemaining == 1 && twoExists)
                         {
                             continue;
                         }
@@ -301,7 +317,6 @@ namespace DiscordQuiplash.Games.Quiplash
 
                 //skip giving scores on final round
                 if (roundNumber != 3)
-
                 {
                     string finalMessage = "Current Scores:\n\n";
 
@@ -313,6 +328,7 @@ namespace DiscordQuiplash.Games.Quiplash
                     await channel.SendMessageAsync(finalMessage);
                     await Task.Delay(10000);
                 }
+
             }
             catch (Exception err)
             {
