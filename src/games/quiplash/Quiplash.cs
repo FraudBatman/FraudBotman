@@ -65,6 +65,7 @@ namespace DiscordQuiplash.Games.Quiplash
             await Task.CompletedTask;
         }
 
+        //TODO: Bug with 5 players. possibly in prompt distribution
         async Task round(int roundNumber)
         {
             try

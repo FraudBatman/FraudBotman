@@ -112,7 +112,7 @@ namespace DiscordQuiplash.Games.Quiplash
                         prompt.AnswerA = response;
                         responded = true;
                     }
-                    else if (prompt.PlayerB == playerID && !responded)
+                    else if (prompt.PlayerB == playerID)
                     {
                         if (!responded)
                         {
