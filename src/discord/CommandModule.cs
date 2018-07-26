@@ -43,7 +43,7 @@ namespace DiscordQuiplash.Discord
         }
 
         [Command("play", RunMode = RunMode.Async)]
-        [Summary("Creates a new Quiplash lobby in the channel, or joins one that has not started.")]
+        [Summary("Creates a new game lobby in the channel, or joins one that has not started.")]
         public async Task Play(string gameName = "Quiplash")
         {
             try
