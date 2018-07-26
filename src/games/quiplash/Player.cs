@@ -49,6 +49,7 @@ namespace DiscordQuiplash.Games.Quiplash
                         while (!responded)
                         {
                             await Task.Delay(1);
+                            ct.ThrowIfCancellationRequested();
                         }
                         prompt.AnswerA = response;
                     }
@@ -106,6 +107,7 @@ namespace DiscordQuiplash.Games.Quiplash
                         while (!responded)
                         {
                             await Task.Delay(1);
+                            ct.ThrowIfCancellationRequested();
                         }
                         prompt.AnswerA = response;
                         break;

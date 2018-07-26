@@ -188,30 +188,39 @@ namespace DiscordQuiplash.Games.Quiplash
                     var bVotes = reactions.GetValueOrDefault(new Emoji("🇧")).ReactionCount - 1;
 
                     //check both responses for author votes
+                    IEnumerator<IUser> voters = null;
 
                     //this is answer a
-                    var voters = message.GetReactionUsersAsync("🇦").GetAwaiter().GetResult().GetEnumerator();
-                    do
+                    //make sure there are more than 0 votes!
+                    if (aVotes >= 0)
                     {
-                        //check if voter is the owner of response A
-                        if (voters.Current == players[prompt.PlayerA].User)
+                        voters = message.GetReactionUsersAsync("🇦").GetAwaiter().GetResult().GetEnumerator();
+                        do
                         {
-                            aVotes--;
-                            break;
-                        }
-                    } while (!voters.MoveNext());
+                            //check if voter is the owner of response A
+                            if (voters.Current == players[prompt.PlayerA].User)
+                            {
+                                aVotes--;
+                                break;
+                            }
+                        } while (!voters.MoveNext());
+                    }
 
                     //this is answer b
-                    voters = message.GetReactionUsersAsync("🇧").GetAwaiter().GetResult().GetEnumerator();
-                    do
+                    //make sure there are more than zero votes!
+                    if (bVotes >= 0)
                     {
-                        //check if voter is the owner of response A
-                        if (voters.Current == players[prompt.PlayerB].User)
+                        voters = message.GetReactionUsersAsync("🇧").GetAwaiter().GetResult().GetEnumerator();
+                        do
                         {
-                            bVotes--;
-                            break;
-                        }
-                    } while (!voters.MoveNext());
+                            //check if voter is the owner of response A
+                            if (voters.Current == players[prompt.PlayerB].User)
+                            {
+                                bVotes--;
+                                break;
+                            }
+                        } while (!voters.MoveNext());
+                    }
 
                     var aPoints = ((double)aVotes / (double)(aVotes + bVotes)) * 1000 * roundNumber;
                     var bPoints = ((double)bVotes / (double)(aVotes + bVotes)) * 1000 * roundNumber;
