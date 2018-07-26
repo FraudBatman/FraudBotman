@@ -127,7 +127,7 @@ namespace DiscordQuiplash.Discord
             }
         }
 
-        [Command("shutup")]
+        [Command("shutup", RunMode = RunMode.Async)]
         [Summary("Shuts you up.")]
         public async Task ShutUp()
         {
