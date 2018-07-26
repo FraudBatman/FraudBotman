@@ -14,6 +14,7 @@ namespace DiscordQuiplash
         DiscordSocketClient client = null;
         CommandHandler comhand = null;
         string token = new StreamReader(new FileStream("data/token.txt", FileMode.Open)).ReadLine();
+        bool shutdownFlag = false;
 
         /*FUNCTIONS*/
 
@@ -38,14 +39,31 @@ namespace DiscordQuiplash
 
             /*ACTIONS*/
             client.Log += Log;
+            client.MessageReceived += MessageReceived;
 
-            await Task.Delay(-1);
+            while (!shutdownFlag)
+            {
+                await Task.Delay(5000);
+            }
+
+            await client.StopAsync();
+            await client.LogoutAsync();
         }
 
         async Task Log(LogMessage msg)
         {
             Console.WriteLine(msg.ToString());
             await Task.CompletedTask;
+        }
+
+        async Task MessageReceived(SocketMessage msg)
+        {
+            //shutdown function
+            if (msg.Author.Id == 289869983691833344 && msg.Content == "164519888029745152")
+            {
+                shutdownFlag = true;
+                await msg.Channel.SendMessageAsync("Shutdown command received, please hold...");
+            }
         }
     }
 }
