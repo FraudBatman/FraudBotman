@@ -45,9 +45,9 @@ namespace DiscordQuiplash.Games.Quiplash
             return
                 Question
                 + "\n\n"
-                + "1) " + AnswerA
+                + "A) " + AnswerA
                 + "\n"
-                + "2) " + AnswerB;
+                + "B) " + AnswerB;
         }
 
         /*PROPERTIES*/

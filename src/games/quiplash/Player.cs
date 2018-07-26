@@ -110,7 +110,7 @@ namespace DiscordQuiplash.Games.Quiplash
                             ct.ThrowIfCancellationRequested();
                         }
                         prompt.AnswerA = response;
-                        break;
+                        responded = true;
                     }
                     else if (prompt.PlayerB == playerID && !responded)
                     {
@@ -127,6 +127,7 @@ namespace DiscordQuiplash.Games.Quiplash
                             ct.ThrowIfCancellationRequested();
                         }
                         prompt.AnswerB = response;
+                        responded = true;
                     }
                 }
                 await user.SendMessageAsync("That's all! Please return to the game channel.");

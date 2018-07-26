@@ -34,7 +34,6 @@ namespace DiscordQuiplash.Games.Quiplash
 
             await channel.SendMessageAsync("Welcome to Quiplash! This bot will DM you two prompts, one at a time. Respond to each of them with whatever you think is funny. Your answer will be pitted against someone else, and you'll get points based on votes!\nYou will have two minutes to respond to both prompts.");
             await Task.Delay(15000);
-
             await round(1);
             await round(2);
             await round(3);
@@ -192,34 +191,34 @@ namespace DiscordQuiplash.Games.Quiplash
 
                     //this is answer a
                     //make sure there are more than 0 votes!
-                    if (aVotes >= 0)
+                    if (aVotes > 0)
                     {
                         voters = message.GetReactionUsersAsync("🇦").GetAwaiter().GetResult().GetEnumerator();
-                        do
+                        while (voters.MoveNext())
                         {
                             //check if voter is the owner of response A
-                            if (voters.Current == players[prompt.PlayerA].User)
+                            if (voters.Current.Id == players[prompt.PlayerA].User.Id)
                             {
                                 aVotes--;
                                 break;
                             }
-                        } while (!voters.MoveNext());
+                        }
                     }
 
                     //this is answer b
                     //make sure there are more than zero votes!
-                    if (bVotes >= 0)
+                    if (bVotes > 0)
                     {
                         voters = message.GetReactionUsersAsync("🇧").GetAwaiter().GetResult().GetEnumerator();
-                        do
+                        while (voters.MoveNext())
                         {
                             //check if voter is the owner of response A
-                            if (voters.Current == players[prompt.PlayerB].User)
+                            if (voters.Current.Id == players[prompt.PlayerB].User.Id)
                             {
                                 bVotes--;
                                 break;
                             }
-                        } while (!voters.MoveNext());
+                        }
                     }
 
                     var aPoints = ((double)aVotes / (double)(aVotes + bVotes)) * 1000 * roundNumber;

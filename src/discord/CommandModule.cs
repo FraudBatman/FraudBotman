@@ -230,15 +230,6 @@ namespace DiscordQuiplash.Discord
             await channel.SendMessageAsync("ALL HAIL KING ALLIE :crown:");
         }
 
-        [Command("shutdown")]
-        [Summary("Shuts down botman for safer reseting")]
-        public async Task Shutdown()
-        {
-            await (Context.Client as DiscordSocketClient).LogoutAsync();
-            await (Context.Client as DiscordSocketClient).StopAsync();
-            Environment.Exit(0);
-        }
-
         [Command("whogay")]
         [Summary("lol")]
         public async Task WhoGay()
