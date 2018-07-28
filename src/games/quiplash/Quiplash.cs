@@ -59,7 +59,15 @@ namespace DiscordQuiplash.Games.Quiplash
             embed.Color = new Color(255, 255, 0);
             embed.Title = players[winningIndex].User.Username + " wins!";
 
-            players.Sort((x, y) => x.Score.CompareTo(y.Score));
+            players.Sort(delegate (Player x, Player y)
+            {
+                var a = x.Score.CompareTo(y.Score);
+
+                if (a == 0)
+                    a = x.User.Username.CompareTo(y.User.Id);
+
+                return a;
+            });
 
             string ranking = "";
 
@@ -81,7 +89,7 @@ namespace DiscordQuiplash.Games.Quiplash
                         break;
                 }
 
-                ranking += players[i].User.Username + "\n";
+                ranking += $"{players[i].User.Username} | {players[i].Score} points +\n";
             }
 
             embed.AddField("FINAL SCORES", ranking);
