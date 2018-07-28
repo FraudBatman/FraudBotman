@@ -37,6 +37,9 @@ namespace DiscordQuiplash
             comhand = new CommandHandler();
             await comhand.Install(client);
 
+            await client.SetGameAsync(".help");
+            await client.SetStatusAsync(UserStatus.Online);
+
             /*ACTIONS*/
             client.Log += Log;
             client.MessageReceived += MessageReceived;
@@ -45,6 +48,8 @@ namespace DiscordQuiplash
             {
                 await Task.Delay(5000);
             }
+
+            await client.SetStatusAsync(UserStatus.Offline);
 
             await client.StopAsync();
             await client.LogoutAsync();
