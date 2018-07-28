@@ -49,7 +49,7 @@ namespace DiscordQuiplash
                 await Task.Delay(5000);
             }
 
-            await client.SetStatusAsync(UserStatus.Offline);
+            await client.SetStatusAsync(UserStatus.Invisible);
 
             await client.StopAsync();
             await client.LogoutAsync();
