@@ -64,7 +64,7 @@ namespace DiscordQuiplash.Games.Quiplash
                 var a = x.Score.CompareTo(y.Score);
 
                 if (a == 0)
-                    a = x.User.Username.CompareTo(y.User.Id);
+                    a = x.User.Id.CompareTo(y.User.Id);
 
                 return a;
             });
@@ -323,7 +323,7 @@ namespace DiscordQuiplash.Games.Quiplash
                             embed.AddField("All Done!", "Prepare to vote!");
                         }
 
-                        if (!allDone && twoSeconds == 60)
+                        if (!allDone && twoSeconds == 30)
                         {
                             //force end of turn
                             cts.Cancel();
