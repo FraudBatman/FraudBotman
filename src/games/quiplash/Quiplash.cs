@@ -12,7 +12,7 @@ namespace DiscordQuiplash.Games.Quiplash
         /*MEMBERS*/
         DiscordSocketClient client = null;
         SocketTextChannel channel = null;
-        List<Player> players = null;
+        List<QuiplashPlayer> players = null;
 
         /*CONSTRUCTORS*/
         public Quiplash(DiscordSocketClient socketClient, SocketTextChannel gameChannel)
@@ -21,7 +21,7 @@ namespace DiscordQuiplash.Games.Quiplash
             Name = "Quiplash";
             client = socketClient;
             channel = gameChannel;
-            players = new List<Player>();
+            players = new List<QuiplashPlayer>();
         }
 
         /*METHODS*/
@@ -29,7 +29,7 @@ namespace DiscordQuiplash.Games.Quiplash
         {
             foreach (IUser user in users)
             {
-                players.Add(new Player(client, channel, user));
+                players.Add(new QuiplashPlayer(client, channel, user));
             }
 
             await channel.SendMessageAsync("Welcome to Quiplash! This bot will DM you two prompts, one at a time. Respond to each of them with whatever you think is funny. Your answer will be pitted against someone else, and you'll get points based on votes!\nYou will have two minutes to respond to both prompts.");
@@ -55,7 +55,7 @@ namespace DiscordQuiplash.Games.Quiplash
 
             var message = "FINAL SCORES\n\n";
 
-            foreach (Player player in players)
+            foreach (QuiplashPlayer player in players)
             {
                 message += player.User.Username + ": " + player.Score + " points\n";
             }
@@ -93,7 +93,7 @@ namespace DiscordQuiplash.Games.Quiplash
                 var prompts = new List<Prompt>();
 
                 //create a list of unique prompts, while also resetting everyone's prompt count
-                foreach (Player p in players)
+                foreach (QuiplashPlayer p in players)
                 {
                     p.PromptsRemaining = 2;
                     Prompt prompt = null;
@@ -127,7 +127,7 @@ namespace DiscordQuiplash.Games.Quiplash
                     {
                         //determine who to pick
                         bool twoExists = false;
-                        foreach (Player player in players)
+                        foreach (QuiplashPlayer player in players)
                         {
                             if (player.PromptsRemaining == 2)
                                 twoExists = true;
@@ -319,7 +319,7 @@ namespace DiscordQuiplash.Games.Quiplash
                 {
                     string finalMessage = "Current Scores:\n\n";
 
-                    foreach (Player player in players)
+                    foreach (QuiplashPlayer player in players)
                     {
                         finalMessage += player.User.Username + ": " + player.Score + "\n";
                     }

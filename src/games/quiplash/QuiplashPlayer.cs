@@ -7,12 +7,9 @@ using System.Threading.Tasks;
 
 namespace DiscordQuiplash.Games.Quiplash
 {
-    class Player
+    class QuiplashPlayer : Player
     {
         /*MEMBERS*/
-        DiscordSocketClient client = null;
-        SocketTextChannel responseChannel = null;
-        IUser user = null;
         int score = 0;
         int promptsRemaining = 2;
         bool responded = false;
@@ -20,11 +17,11 @@ namespace DiscordQuiplash.Games.Quiplash
         ulong lastResponse = 0;
 
         /*CONSTRUCTORS*/
-        public Player(DiscordSocketClient socketClient, SocketTextChannel socketChannel, IUser socketUser)
+        public QuiplashPlayer(DiscordSocketClient socketClient, SocketTextChannel socketChannel, IUser socketUser)
         {
-            client = socketClient;
-            responseChannel = socketChannel;
-            user = socketUser;
+            Client = socketClient;
+            ResponseChannel = socketChannel;
+            User = socketUser;
         }
 
         /*METHODS*/
@@ -32,10 +29,10 @@ namespace DiscordQuiplash.Games.Quiplash
         {
             try
             {
-                await user.SendMessageAsync("Please answer the following 2 prompts as best as you can.");
+                await User.SendMessageAsync("Please answer the following 2 prompts as best as you can.");
 
                 //connect message being recieved to response checking
-                client.MessageReceived += CheckForResponse;
+                Client.MessageReceived += CheckForResponse;
                 foreach (Prompt prompt in prompts)
                 {
                     responded = false;
@@ -43,7 +40,7 @@ namespace DiscordQuiplash.Games.Quiplash
                     if (prompt.PlayerA == playerID)
                     {
                         //send the prompt
-                        await user.SendMessageAsync(prompt.Question);
+                        await User.SendMessageAsync(prompt.Question);
 
                         //wait for response (see method CheckForResponse)
                         while (!responded)
@@ -56,7 +53,7 @@ namespace DiscordQuiplash.Games.Quiplash
                     else if (prompt.PlayerB == playerID)
                     {
                         //send the prompt
-                        await user.SendMessageAsync(prompt.Question);
+                        await User.SendMessageAsync(prompt.Question);
 
                         //wait for response (see method CheckForResponse)
                         while (!responded)
@@ -67,17 +64,17 @@ namespace DiscordQuiplash.Games.Quiplash
                         prompt.AnswerB = response;
                     }
                 }
-                await user.SendMessageAsync("That's all! Please return to the game channel.");
+                await User.SendMessageAsync("That's all! Please return to the game channel.");
                 await Task.CompletedTask;
             }
             catch (OperationCanceledException)
             {
-                await user.SendMessageAsync("Time is up! Please return to the game channel.");
+                await User.SendMessageAsync("Time is up! Please return to the game channel.");
                 await Task.CompletedTask;
             }
             catch (Exception err)
             {
-                await responseChannel.SendMessageAsync(err.ToString());
+                await ResponseChannel.SendMessageAsync(err.ToString());
             }
         }
 
@@ -85,14 +82,14 @@ namespace DiscordQuiplash.Games.Quiplash
         {
             try
             {
-                await user.SendMessageAsync("Please answer the following prompt as best as you can. Your answer will be carried over to a secret 2nd prompt.");
+                await User.SendMessageAsync("Please answer the following prompt as best as you can. Your answer will be carried over to a secret 2nd prompt.");
 
                 //set responded off and clear response
                 responded = false;
                 response = "";
 
                 //connect message being recieved to response checking
-                client.MessageReceived += CheckForResponse;
+                Client.MessageReceived += CheckForResponse;
                 foreach (Prompt prompt in prompts)
                 {
                     if (prompt.PlayerA == playerID)
@@ -100,7 +97,7 @@ namespace DiscordQuiplash.Games.Quiplash
                         if (!responded)
                         {
                             //send the prompt
-                            await user.SendMessageAsync(prompt.Question);
+                            await User.SendMessageAsync(prompt.Question);
                         }
 
                         //wait for response (see method CheckForResponse)
@@ -117,7 +114,7 @@ namespace DiscordQuiplash.Games.Quiplash
                         if (!responded)
                         {
                             //send the prompt
-                            await user.SendMessageAsync(prompt.Question);
+                            await User.SendMessageAsync(prompt.Question);
                         }
 
                         //wait for response (see method CheckForResponse)
@@ -130,24 +127,24 @@ namespace DiscordQuiplash.Games.Quiplash
                         responded = true;
                     }
                 }
-                await user.SendMessageAsync("That's all! Please return to the game channel.");
+                await User.SendMessageAsync("That's all! Please return to the game channel.");
                 await Task.CompletedTask;
             }
             catch (OperationCanceledException)
             {
-                await user.SendMessageAsync("Time is up! Please return to the game channel.");
+                await User.SendMessageAsync("Time is up! Please return to the game channel.");
                 await Task.CompletedTask;
             }
             catch (Exception err)
             {
-                await responseChannel.SendMessageAsync(err.ToString());
+                await ResponseChannel.SendMessageAsync(err.ToString());
             }
         }
 
         private async Task CheckForResponse(SocketMessage msg)
         {
             //did the message recieved come from a dm, is not from botman, and isn't the last response?
-            if (msg.Channel.Id == user.GetOrCreateDMChannelAsync().GetAwaiter().GetResult().Id && !msg.Author.IsBot && msg.Id != lastResponse)
+            if (msg.Channel.Id == User.GetOrCreateDMChannelAsync().GetAwaiter().GetResult().Id && !msg.Author.IsBot && msg.Id != lastResponse)
             {
                 //that means they responded
                 responded = true;
@@ -160,18 +157,6 @@ namespace DiscordQuiplash.Games.Quiplash
         }
 
         /*PROPERTIES*/
-        public SocketTextChannel ResponseChannel
-        {
-            get { return responseChannel; }
-            set { responseChannel = value; }
-        }
-
-        public IUser User
-        {
-            get { return user; }
-            set { user = value; }
-        }
-
         public int Score
         {
             get { return score; }

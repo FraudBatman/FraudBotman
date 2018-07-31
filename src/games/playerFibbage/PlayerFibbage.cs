@@ -1,5 +1,8 @@
+using Discord;
 using Discord.WebSocket;
+using DiscordQuiplash.Games;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DiscordQuiplash.Games.PlayerFibbage
 {
@@ -21,6 +24,14 @@ namespace DiscordQuiplash.Games.PlayerFibbage
         }
 
         /*METHODS*/
+        public override async Task Start(List<IUser> users)
+        {
+            foreach (IUser user in users)
+            {
+                players.Add(new Player());
+            }
+        }
+
         /*PROPERTIES*/
     }
 }

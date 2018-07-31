@@ -1,6 +1,6 @@
 namespace DiscordQuiplash.Games.PlayerFibbage
 {
-    class Player
+    class PlayerFibbagePlayer : Player
     {
 
     }
