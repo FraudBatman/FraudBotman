@@ -31,8 +31,11 @@ namespace DiscordQuiplash.Games.Quiplash
             {
                 players.Add(new QuiplashPlayer(client, channel, user));
             }
-
-            await channel.SendMessageAsync("Welcome to Quiplash! This bot will DM you two prompts, one at a time. Respond to each of them with whatever you think is funny. Your answer will be pitted against someone else, and you'll get points based on votes!\nYou will have two minutes to respond to both prompts.");
+            var embed = new EmbedBuilder();
+            embed.Color = new Color(255, 255, 0);
+            embed.Title = "Welcome to Quiplash!";
+            embed.AddField("Rules", "This bot will DM you two prompts, one at a time. Respond to each of them with whatever you think is funny.Your answer will be pitted against someone else, and you'll get points based on votes! You will have two minutes to respond to both prompts.");
+            await channel.SendMessageAsync("", false, embed);
             await Task.Delay(15000);
             await round(1);
             await round(2);
@@ -51,16 +54,51 @@ namespace DiscordQuiplash.Games.Quiplash
                 }
             }
 
-            await channel.SendMessageAsync(players[winningIndex].User.Username + " wins!");
+            embed = new EmbedBuilder();
 
-            var message = "FINAL SCORES\n\n";
+            embed.Color = new Color(255, 255, 0);
+            embed.Title = players[winningIndex].User.Username + " wins!";
 
-            foreach (QuiplashPlayer player in players)
+            players.Sort(delegate (Player x, Player y)
             {
-                message += player.User.Username + ": " + player.Score + " points\n";
+                var a = x.Score.CompareTo(y.Score);
+
+                if (a == 0)
+                    a = x.User.Id.CompareTo(y.User.Id);
+
+                return a;
+            });
+
+            string ranking = "";
+
+<<<<<<< HEAD
+            foreach (QuiplashPlayer player in players)
+=======
+            for (int i = 0; i < players.Count; i++)
+>>>>>>> master
+            {
+                switch (i)
+                {
+                    case 0:
+                        ranking += "1st: ";
+                        break;
+                    case 1:
+                        ranking += "2nd: ";
+                        break;
+                    case 2:
+                        ranking += "3rd: ";
+                        break;
+                    default:
+                        ranking += (i + 1) + "th: ";
+                        break;
+                }
+
+                ranking += $"{players[i].User.Username} | {players[i].Score} points +\n";
             }
 
-            await channel.SendMessageAsync(message);
+            embed.AddField("FINAL SCORES", ranking);
+
+            await channel.SendMessageAsync("", false, embed);
 
             await Task.CompletedTask;
         }
@@ -69,23 +107,34 @@ namespace DiscordQuiplash.Games.Quiplash
         {
             try
             {
+                var embed = new EmbedBuilder();
+                embed.Color = new Color(255, 255, 0);
                 switch (roundNumber)
                 {
                     case 1:
-                        await channel.SendMessageAsync("This is round one! Prompts are worth 1000 points, wins are worth 500 points, and quiplashes are worth 1500 points.");
+                        embed.Title = ("Round 1");
+                        embed.Description = ("Rounds are worth 1000 points. The winner bonus is 500 points, and the quiplash bonus is 1500 points");
                         break;
                     case 2:
-                        await channel.SendMessageAsync("This is round 2! Prompts are worth 2000 points, wins are worth 1000 points, and quiplashes are worth 3000 points.");
+                        embed.Title = ("Round 2");
+                        embed.Description = ("Rounds are worth 2000 points. The winner bonus is 1000 points, and the quiplash bonus is 3000 points");
                         break;
                     case 3:
-                        await channel.SendMessageAsync("This is round 3! This is the final round. Prompts are worth 3000 points, wins are worth 1500 points, and quiplashes are worth 4500 points. Also, as a last round addition, your answer from prompt 1 will be copied into prompt 2!");
-                        await Task.Delay(5000);
+                        embed.Title = ("Round 3");
+                        embed.Description = ("Rounds are worth 3000 points. The winner bonus is 1500 points, and the quiplash bonus is 4500 points. As a bonus rule, you will only see your first prompt, and the second prompt's answer will be the one you filled in for the first prompt. Good luck!");
                         break;
                     default:
                         break;
                 }
 
+                await channel.SendMessageAsync("", false, embed);
                 await Task.Delay(10000);
+
+                //additional time to read the extra text
+                if (roundNumber == 3)
+                {
+                    await Task.Delay(5000);
+                }
 
                 //create a random to use for prompt matching
                 var random = new Random();
@@ -160,6 +209,7 @@ namespace DiscordQuiplash.Games.Quiplash
                 {
                     for (int i = 0; i < players.Count; i++)
                     {
+                        players[i].FinishedTurn = false;
                         players[i].lastTurn(prompts, cts.Token, i);
                     }
                 }
@@ -168,30 +218,143 @@ namespace DiscordQuiplash.Games.Quiplash
                     //Do async so everyone get's their turn at once
                     for (int i = 0; i < players.Count; i++)
                     {
+                        players[i].FinishedTurn = false;
                         players[i].takeTurn(prompts, cts.Token, i);
                     }
                 }
 
-                //two minute timer
-                await Task.Delay(60000);
+                //NEW PLAYER PROGRESS SHEET
+                embed = new EmbedBuilder();
 
-                await channel.SendMessageAsync("One minute remaining!");
+                embed.Title = $"Round {roundNumber}";
+                embed.Color = new Color(255, 255, 0);
 
-                await Task.Delay(60000);
+                foreach (Player player in players)
+                {
+                    embed.Description += $"{player.User.Username}: {(player.FinishedTurn ? ":white_check_mark:" : ":x:")}\n";
+                }
 
-                //force end of turn
-                cts.Cancel();
+                var message = await channel.SendMessageAsync("", false, embed);
 
-                await channel.SendMessageAsync("Time is up! Prepare to vote!");
+                //two minute timer, or one minute for the final round
+                int twoSeconds = 0;
+
+                if (roundNumber != 3)
+                {
+                    while (twoSeconds < 60)
+                    {
+                        await Task.Delay(2000);
+                        twoSeconds++;
+
+                        //refresh the embed
+                        embed = new EmbedBuilder();
+                        embed.Title = $"Round {roundNumber}";
+                        embed.Color = new Color(255, 255, 0);
+
+                        foreach (Player player in players)
+                        {
+                            embed.Description += $"{player.User.Username}: {(player.FinishedTurn ? ":white_check_mark:" : ":x:")}\n";
+                        }
+
+                        bool allDone = true;
+
+                        foreach (Player player in players)
+                        {
+                            if (!player.FinishedTurn)
+                            {
+                                allDone = false;
+                            }
+                        }
+
+                        if (twoSeconds >= 30 && !allDone)
+                        {
+                            embed.AddField("One minute remaining!", "Hurry up!");
+                        }
+
+                        if (allDone)
+                        {
+                            embed.AddField("All Done!", "Prepare to vote!");
+                        }
+
+                        if (!allDone && twoSeconds == 60)
+                        {
+                            //force end of turn
+                            cts.Cancel();
+                            embed.AddField("Time's Up!", "Prepare to vote!");
+                        }
+                        await (message as IUserMessage).ModifyAsync(msg => msg.Embed = embed.Build());
+
+                        if (allDone)
+                        {
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    while (twoSeconds < 30)
+                    {
+                        await Task.Delay(2000);
+                        twoSeconds++;
+
+                        //refresh the embed
+                        embed = new EmbedBuilder();
+                        embed.Title = $"Round {roundNumber}";
+                        embed.Color = new Color(255, 255, 0);
+
+                        foreach (Player player in players)
+                        {
+                            embed.Description += $"{player.User.Username}: {(player.FinishedTurn ? ":white_check_mark:" : ":x:")}\n";
+                        }
+
+                        bool allDone = true;
+
+                        foreach (Player player in players)
+                        {
+                            if (!player.FinishedTurn)
+                            {
+                                allDone = false;
+                            }
+                        }
+
+                        if (twoSeconds >= 15 && !allDone)
+                        {
+                            embed.AddField("30 seconds remaining!", "Hurry up!");
+                        }
+
+                        if (allDone)
+                        {
+                            embed.AddField("All Done!", "Prepare to vote!");
+                        }
+
+                        if (!allDone && twoSeconds == 30)
+                        {
+                            //force end of turn
+                            cts.Cancel();
+                            embed.AddField("Time's Up!", "Prepare to vote!");
+                        }
+                        await (message as IUserMessage).ModifyAsync(msg => msg.Embed = embed.Build());
+
+                        if (allDone)
+                        {
+                            break;
+                        }
+                    }
+                }
 
                 await Task.Delay(5000);
 
                 //vote and scores for each prompt
                 foreach (Prompt prompt in prompts)
                 {
-                    await channel.SendMessageAsync("----------");
+                    embed = new EmbedBuilder();
+
+                    embed.Color = new Color(255, 255, 0);
+                    embed.Title = (prompt.Question);
+                    embed.Description = ($"A) {prompt.AnswerA}\nB) {prompt.AnswerB}");
+
                     //send the prompt and let people vote
-                    var message = await channel.SendMessageAsync(prompt.ToString());
+                    message = await channel.SendMessageAsync("", false, embed);
                     await message.AddReactionAsync(new Emoji("🇦"));
                     await message.AddReactionAsync(new Emoji("🇧"));
                     await Task.Delay(15000);
@@ -247,12 +410,12 @@ namespace DiscordQuiplash.Games.Quiplash
                         bPoints = 0;
                     }
 
-                    string resultMessage =
-                        "\"" + prompt.AnswerA + "\" -" + players[prompt.PlayerA].User.Username + " | " + aVotes + " votes\n" +
-                        "\"" + prompt.AnswerB + "\" -" + players[prompt.PlayerB].User.Username + " | " + bVotes + " votes\n\n";
+                    //show votes
+                    embed.AddField("VOTES", $"\"{prompt.AnswerA}\" - {players[prompt.PlayerA].User.Username} ({aVotes} votes)\n"
+                    + $"\"{prompt.AnswerB}\" - {players[prompt.PlayerB].User.Username} ({bVotes} votes)");
 
                     //finish the message
-
+                    string content = "";
                     //a won
                     if (aPoints > bPoints)
                     {
@@ -264,14 +427,14 @@ namespace DiscordQuiplash.Games.Quiplash
                         {
                             aPoints += 1000 * roundNumber;
 
-                            resultMessage +=
+                            content +=
                                 players[prompt.PlayerA].User.Username + " got a quiplash for a total of " + (int)aPoints + " points. (" + (1500 * roundNumber) + " point bonus for quiplash)\n" +
                                 players[prompt.PlayerB].User.Username + " earned " + (int)bPoints + " points.";
                         }
 
                         else
                         {
-                            resultMessage +=
+                            content +=
                                 players[prompt.PlayerA].User.Username + " earned " + (int)aPoints + " points. (" + (500 * roundNumber) + " point bonus for winning)\n" +
                                 players[prompt.PlayerB].User.Username + " earned " + (int)bPoints + " points.";
                         }
@@ -287,13 +450,13 @@ namespace DiscordQuiplash.Games.Quiplash
                         {
                             bPoints += 1000 * roundNumber;
 
-                            resultMessage +=
+                            content +=
                                 players[prompt.PlayerA].User.Username + " earned " + (int)aPoints + " points.\n" +
                                 players[prompt.PlayerB].User.Username + " got a quiplash for a total of " + (int)bPoints + " points. (" + (1500 * roundNumber) + " point bonus for quiplash)";
                         }
                         else
                         {
-                            resultMessage +=
+                            content +=
                                 players[prompt.PlayerA].User.Username + " earned " + (int)aPoints + " points.\n" +
                                 players[prompt.PlayerB].User.Username + " earned " + (int)bPoints + " points. (" + (500 * roundNumber) + " point bonus for winning)\n";
                         }
@@ -301,30 +464,37 @@ namespace DiscordQuiplash.Games.Quiplash
                     //draw
                     else
                     {
-                        resultMessage +=
+                        content +=
                             players[prompt.PlayerA].User.Username + " earned " + (int)aPoints + " points.\n" +
                             players[prompt.PlayerB].User.Username + " earned " + (int)bPoints + " points.";
                     }
+
+                    embed.AddField("SCORES", content);
 
                     //add points to the players scores
                     players[prompt.PlayerA].Score += (int)aPoints;
                     players[prompt.PlayerB].Score += (int)bPoints;
 
-                    await channel.SendMessageAsync(resultMessage);
+                    await (message as IUserMessage).ModifyAsync(msg => msg.Embed = embed.Build());
                     await Task.Delay(5000);
                 }
 
                 //skip giving scores on final round
                 if (roundNumber != 3)
                 {
-                    string finalMessage = "Current Scores:\n\n";
+                    string finalMessage = "";
 
                     foreach (QuiplashPlayer player in players)
                     {
                         finalMessage += player.User.Username + ": " + player.Score + "\n";
                     }
 
-                    await channel.SendMessageAsync(finalMessage);
+                    embed = new EmbedBuilder();
+                    embed.Color = new Color(255, 255, 0);
+                    embed.Title = "SCORES";
+                    embed.Description = finalMessage;
+
+                    await channel.SendMessageAsync("", false, embed);
                     await Task.Delay(10000);
                 }
 

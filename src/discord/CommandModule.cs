@@ -13,6 +13,18 @@ namespace DiscordQuiplash.Discord
     {
         static List<GameLobby> lobbies = new List<GameLobby>();
 
+        [Command("embedTest")]
+        [Summary("")]
+        public async Task EmbedTest()
+        {
+            var embed = new EmbedBuilder();
+            embed.Title = "Test";
+            embed.Color = new Color(255, 255, 0);
+            embed.Description = "A) blah\nB)blah";
+            embed.AddField(":white_check_mark: :x:", "fuck you");
+            await ReplyAsync("", false, embed);
+        }
+
         [Command("help")]
         [Summary("Lists all available commands")]
         public async Task Help()
@@ -127,7 +139,7 @@ namespace DiscordQuiplash.Discord
             }
         }
 
-        [Command("shutup")]
+        [Command("shutup", RunMode = RunMode.Async)]
         [Summary("Shuts you up.")]
         public async Task ShutUp()
         {

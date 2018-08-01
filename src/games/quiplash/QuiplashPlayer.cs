@@ -15,6 +15,7 @@ namespace DiscordQuiplash.Games.Quiplash
         bool responded = false;
         string response = "";
         ulong lastResponse = 0;
+        bool finishedTurn = false;
 
         /*CONSTRUCTORS*/
         public QuiplashPlayer(DiscordSocketClient socketClient, SocketTextChannel socketChannel, IUser socketUser) : base(socketClient, socketChannel, socketUser)
@@ -28,6 +29,8 @@ namespace DiscordQuiplash.Games.Quiplash
             try
             {
                 await User.SendMessageAsync("Please answer the following 2 prompts as best as you can.");
+
+                finishedTurn = false;
 
                 //connect message being recieved to response checking
                 Client.MessageReceived += CheckForResponse;
@@ -63,6 +66,7 @@ namespace DiscordQuiplash.Games.Quiplash
                     }
                 }
                 await User.SendMessageAsync("That's all! Please return to the game channel.");
+                finishedTurn = true;
                 await Task.CompletedTask;
             }
             catch (OperationCanceledException)
@@ -125,7 +129,12 @@ namespace DiscordQuiplash.Games.Quiplash
                         responded = true;
                     }
                 }
+<<<<<<< HEAD:src/games/quiplash/QuiplashPlayer.cs
                 await User.SendMessageAsync("That's all! Please return to the game channel.");
+=======
+                await user.SendMessageAsync("That's all! Please return to the game channel.");
+                finishedTurn = true;
+>>>>>>> master:src/games/quiplash/Player.cs
                 await Task.CompletedTask;
             }
             catch (OperationCanceledException)
@@ -165,6 +174,12 @@ namespace DiscordQuiplash.Games.Quiplash
         {
             get { return promptsRemaining; }
             set { promptsRemaining = value; }
+        }
+
+        public bool FinishedTurn
+        {
+            get { return finishedTurn; }
+            set { finishedTurn = value; }
         }
     }
 }
