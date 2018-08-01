@@ -30,6 +30,8 @@ namespace DiscordQuiplash.Games.PlayerFibbage
             {
                 players.Add(new PlayerFibbagePlayer(client, channel, user));
             }
+
+            var embed = new EmbedBuilder();
         }
 
         /*PROPERTIES*/

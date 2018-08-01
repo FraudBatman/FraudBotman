@@ -59,7 +59,7 @@ namespace DiscordQuiplash.Games.Quiplash
             embed.Color = new Color(255, 255, 0);
             embed.Title = players[winningIndex].User.Username + " wins!";
 
-            players.Sort(delegate (Player x, Player y)
+            players.Sort(delegate (QuiplashPlayer x, QuiplashPlayer y)
             {
                 var a = x.Score.CompareTo(y.Score);
 
@@ -71,11 +71,7 @@ namespace DiscordQuiplash.Games.Quiplash
 
             string ranking = "";
 
-<<<<<<< HEAD
-            foreach (QuiplashPlayer player in players)
-=======
             for (int i = 0; i < players.Count; i++)
->>>>>>> master
             {
                 switch (i)
                 {
@@ -229,7 +225,7 @@ namespace DiscordQuiplash.Games.Quiplash
                 embed.Title = $"Round {roundNumber}";
                 embed.Color = new Color(255, 255, 0);
 
-                foreach (Player player in players)
+                foreach (QuiplashPlayer player in players)
                 {
                     embed.Description += $"{player.User.Username}: {(player.FinishedTurn ? ":white_check_mark:" : ":x:")}\n";
                 }
@@ -251,14 +247,14 @@ namespace DiscordQuiplash.Games.Quiplash
                         embed.Title = $"Round {roundNumber}";
                         embed.Color = new Color(255, 255, 0);
 
-                        foreach (Player player in players)
+                        foreach (QuiplashPlayer player in players)
                         {
                             embed.Description += $"{player.User.Username}: {(player.FinishedTurn ? ":white_check_mark:" : ":x:")}\n";
                         }
 
                         bool allDone = true;
 
-                        foreach (Player player in players)
+                        foreach (QuiplashPlayer player in players)
                         {
                             if (!player.FinishedTurn)
                             {
@@ -302,14 +298,14 @@ namespace DiscordQuiplash.Games.Quiplash
                         embed.Title = $"Round {roundNumber}";
                         embed.Color = new Color(255, 255, 0);
 
-                        foreach (Player player in players)
+                        foreach (QuiplashPlayer player in players)
                         {
                             embed.Description += $"{player.User.Username}: {(player.FinishedTurn ? ":white_check_mark:" : ":x:")}\n";
                         }
 
                         bool allDone = true;
 
-                        foreach (Player player in players)
+                        foreach (QuiplashPlayer player in players)
                         {
                             if (!player.FinishedTurn)
                             {

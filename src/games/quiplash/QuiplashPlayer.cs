@@ -129,12 +129,8 @@ namespace DiscordQuiplash.Games.Quiplash
                         responded = true;
                     }
                 }
-<<<<<<< HEAD:src/games/quiplash/QuiplashPlayer.cs
                 await User.SendMessageAsync("That's all! Please return to the game channel.");
-=======
-                await user.SendMessageAsync("That's all! Please return to the game channel.");
                 finishedTurn = true;
->>>>>>> master:src/games/quiplash/Player.cs
                 await Task.CompletedTask;
             }
             catch (OperationCanceledException)
