@@ -17,11 +17,9 @@ namespace DiscordQuiplash.Games.Quiplash
         ulong lastResponse = 0;
 
         /*CONSTRUCTORS*/
-        public QuiplashPlayer(DiscordSocketClient socketClient, SocketTextChannel socketChannel, IUser socketUser)
+        public QuiplashPlayer(DiscordSocketClient socketClient, SocketTextChannel socketChannel, IUser socketUser) : base(socketClient, socketChannel, socketUser)
         {
-            Client = socketClient;
-            ResponseChannel = socketChannel;
-            User = socketUser;
+
         }
 
         /*METHODS*/

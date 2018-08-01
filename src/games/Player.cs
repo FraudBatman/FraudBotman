@@ -9,6 +9,13 @@ namespace DiscordQuiplash.Games
         SocketTextChannel responseChannel = null;
         IUser user = null;
 
+        public Player(DiscordSocketClient socketClient, SocketTextChannel socketChannel, IUser socketUser)
+        {
+            client = socketClient;
+            responseChannel = socketChannel;
+            user = socketUser;
+        }
+
         protected DiscordSocketClient Client
         {
             get { return client; }

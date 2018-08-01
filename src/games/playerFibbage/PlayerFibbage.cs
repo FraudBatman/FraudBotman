@@ -11,7 +11,7 @@ namespace DiscordQuiplash.Games.PlayerFibbage
         /*MEMBERS*/
         DiscordSocketClient client = null;
         SocketTextChannel channel = null;
-        List<Player> players = null;
+        List<PlayerFibbagePlayer> players = null;
 
         /*CONSTRUCTORS*/
         public PlayerFibbage(DiscordSocketClient socketClient, SocketTextChannel gameChannel)
@@ -20,7 +20,7 @@ namespace DiscordQuiplash.Games.PlayerFibbage
             Name = "Fibbage (Enough About You)";
             client = socketClient;
             channel = gameChannel;
-            players = new List<Player>();
+            players = new List<PlayerFibbagePlayer>();
         }
 
         /*METHODS*/
@@ -28,7 +28,7 @@ namespace DiscordQuiplash.Games.PlayerFibbage
         {
             foreach (IUser user in users)
             {
-                players.Add(new Player());
+                players.Add(new PlayerFibbagePlayer(client, channel, user));
             }
         }
 
