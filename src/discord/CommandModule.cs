@@ -24,7 +24,7 @@ namespace DiscordQuiplash.Discord
             var role = Context.Guild.GetRole(476506271755796482);
 
             //thenadded earlier than now
-            if (then.AddMonths(1).Date.CompareTo(now) >= 0)
+            if (then.AddMonths(1).UtcDateTime.CompareTo(now) <= 0)
             {
                 await (Context.User as IGuildUser).AddRoleAsync(role);
             }
