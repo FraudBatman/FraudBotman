@@ -18,11 +18,11 @@ namespace DiscordQuiplash.Discord
         public async Task EmbedTest()
         {
             var embed = new EmbedBuilder();
-            embed.Title = "Test";
+            embed.Title = $"AHH";
             embed.Color = new Color(255, 255, 0);
-            embed.Description = "A) blah\nB)blah";
-            embed.AddField(":white_check_mark: :x:", "fuck you");
-            await ReplyAsync("", false, embed);
+            embed.Description = $"";
+            var msg = await ReplyAsync("", false, embed);
+            await msg.AddReactionAsync(Emote.Parse("<:one:0>"));
         }
 
         [Command("help")]
