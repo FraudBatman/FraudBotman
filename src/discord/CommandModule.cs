@@ -167,7 +167,7 @@ namespace DiscordQuiplash.Discord
             if (user != null)
             {
                 var role = Context.Guild.GetRole(476508140532137994);
-                await (Context.User as IGuildUser).AddRoleAsync(role);
+                await (user as IGuildUser).AddRoleAsync(role);
                 var sw = new StreamWriter(new FileStream("data/bans.txt", FileMode.Append));
                 var sr = new StreamReader(new FileStream("data/bans.txt", FileMode.Open));
                 sw.WriteLine($"{user.Id}`\"{reason}\" | {Context.User.Mention}");
