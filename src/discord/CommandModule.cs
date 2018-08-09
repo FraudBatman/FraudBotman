@@ -19,14 +19,6 @@ namespace DiscordQuiplash.Discord
         [AllieServerPrecondition]
         public async Task DJ()
         {
-<<<<<<< HEAD
-            var embed = new EmbedBuilder();
-            embed.Title = $"AHH";
-            embed.Color = new Color(255, 255, 0);
-            embed.Description = $"";
-            var msg = await ReplyAsync("", false, embed);
-            await msg.AddReactionAsync(Emote.Parse("<:one:0>"));
-=======
             var now = DateTime.Today;
             var then = (Context.User as IGuildUser).JoinedAt.Value;
             var role = Context.Guild.GetRole(476506271755796482);
@@ -41,7 +33,6 @@ namespace DiscordQuiplash.Discord
             {
                 await ReplyAsync($"Sorry! You must wait until {then.AddMonths(1).Date.ToLongDateString()}");
             }
->>>>>>> master
         }
 
         [Command("help")]
