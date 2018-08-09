@@ -4,6 +4,7 @@ using Discord.WebSocket;
 using DiscordQuiplash.Games;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -13,16 +14,34 @@ namespace DiscordQuiplash.Discord
     {
         static List<GameLobby> lobbies = new List<GameLobby>();
 
-        [Command("embedTest")]
-        [Summary("")]
-        public async Task EmbedTest()
+        [Command("dj")]
+        [Summary("Adds DJ role if requirements are met")]
+        [AllieServerPrecondition]
+        public async Task DJ()
         {
+<<<<<<< HEAD
             var embed = new EmbedBuilder();
             embed.Title = $"AHH";
             embed.Color = new Color(255, 255, 0);
             embed.Description = $"";
             var msg = await ReplyAsync("", false, embed);
             await msg.AddReactionAsync(Emote.Parse("<:one:0>"));
+=======
+            var now = DateTime.Today;
+            var then = (Context.User as IGuildUser).JoinedAt.Value;
+            var role = Context.Guild.GetRole(476506271755796482);
+
+            //thenadded earlier than now
+            if (then.AddMonths(1).Date.CompareTo(now) <= 0)
+            {
+                await (Context.User as IGuildUser).AddRoleAsync(role);
+                await ReplyAsync("You are a DJ now! Congrats!");
+            }
+            else
+            {
+                await ReplyAsync($"Sorry! You must wait until {then.AddMonths(1).Date.ToLongDateString()}");
+            }
+>>>>>>> master
         }
 
         [Command("help")]
@@ -43,7 +62,8 @@ namespace DiscordQuiplash.Discord
 
             foreach (CommandInfo command in commands)
             {
-                normies.Value += $"{command.Name}: {command.Summary}\n";
+                if (command.CheckPreconditionsAsync(Context).GetAwaiter().GetResult().IsSuccess)
+                    normies.Value += $"{command.Name}: {command.Summary}\n";
             }
 
             //add the field to the embed
@@ -146,6 +166,37 @@ namespace DiscordQuiplash.Discord
             var rnd = new Random();
             await Task.Delay(rnd.Next(2, 10) * 1000);
             await ReplyAsync("Shut up.");
+        }
+
+        [Command("timeout")]
+        [Summary("Times you out.")]
+        [AllieServerPrecondition]
+        [AllieModPrecondition]
+        public async Task TimeOut(IUser user = null, [Remainder] string reason = "")
+        {
+            if (user != null)
+            {
+                var role = Context.Guild.GetRole(476508140532137994);
+                await (user as IGuildUser).AddRoleAsync(role);
+                var sw = new StreamWriter(new FileStream("data/bans.txt", FileMode.Append));
+                var sr = new StreamReader(new FileStream("data/bans.txt", FileMode.Open));
+                sw.WriteLine($"{user.Id}`\"{reason}\" | {Context.User.Mention}");
+                sw.Flush();
+                int count = 0;
+                string message = "";
+                string line = "";
+                while (!sr.EndOfStream)
+                {
+                    if ((line = sr.ReadLine()).Contains(user.Id.ToString()))
+                    {
+                        count++;
+                        line = line.Replace($"{user.Id}`", "");
+                        message += line + "\n";
+                    }
+                }
+                message = $"{user.Mention} has been timed out {count} time(s)\n\n" + message;
+                await ReplyAsync(message);
+            }
         }
 
         [Command("whogay")]
