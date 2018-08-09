@@ -27,6 +27,7 @@ namespace DiscordQuiplash.Discord
             if (then.AddMonths(1).Date.CompareTo(now) <= 0)
             {
                 await (Context.User as IGuildUser).AddRoleAsync(role);
+                await ReplyAsync("You are a DJ now! Congrats!");
             }
             else
             {
@@ -177,7 +178,7 @@ namespace DiscordQuiplash.Discord
                 string line = "";
                 while (!sr.EndOfStream)
                 {
-                    if ((line = sr.ReadLine()).Contains(user.Id.ToString())) ;
+                    if ((line = sr.ReadLine()).Contains(user.Id.ToString()))
                     {
                         count++;
                         line = line.Replace($"{user.Id}`", "");
