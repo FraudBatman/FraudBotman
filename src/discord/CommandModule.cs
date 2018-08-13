@@ -71,11 +71,6 @@ namespace DiscordQuiplash.Discord
         {
             try
             {
-                if (!DiscordGame.GameExists(gameName) && gameName != null)
-                {
-                    await ReplyAsync("That game doesn't exist.");
-                    return;
-                }
                 GameLobby lobby = null;
 
                 //check to see if lobby exists
@@ -93,6 +88,12 @@ namespace DiscordQuiplash.Discord
                     //create lobby and game
                     lobby = new GameLobby(Context.Client, Context.Channel, null);
                     lobby.LobbyGame = DiscordGame.ConstructGame(gameName, lobby);
+
+                    if (lobby.LobbyGame == null)
+                    {
+                        await ReplyAsync("That game doesn't exist.");
+                    }
+
                     lobbies.Add(lobby);
 
                     lobby.Players.Add(Context.User);
@@ -148,6 +149,12 @@ namespace DiscordQuiplash.Discord
             {
                 await ReplyAsync(err.ToString());
             }
+        }
+
+        [Command("clay", RunMode = RunMode.Async)]
+        public async Task Clay(string gameName = "K")
+        {
+            Play("K");
         }
 
         [Command("shutup", RunMode = RunMode.Async)]

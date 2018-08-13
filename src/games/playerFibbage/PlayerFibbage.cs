@@ -162,12 +162,14 @@ namespace DiscordQuiplash.Games.PlayerFibbage
                 var promptEmbed = roundPlayer.Prompts[i].PresentPrompt(roundPlayer.User.Username);
                 await channel.SendMessageAsync("", false, promptEmbed);
 
-                foreach (PlayerFibbagePlayer player in players)
+                for (int innerI = 0; i < players.Count; i++)
                 {
-
+                    players[innerI].GetAnswer(promptEmbed, roundPlayer.User.Id, i, innerI, cts.Token);
                 }
 
                 await MonitorProgress(roundPlayer.Prompts[i].GetLiarQuestion(roundPlayer.User.Username), "Prepare for results!", 30000, cts);
+
+                await channel.SendMessageAsync("so how did it go famster dam?");
             }
         }
 

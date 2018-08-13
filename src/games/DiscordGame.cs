@@ -10,38 +10,24 @@ namespace DiscordQuiplash.Games
         int minimumPlayers;
         string name;
 
-        /*STATIC*/
-        public static bool GameExists(string name)
-        {
-            name = name.ToUpperInvariant();
-
-            var games = new List<String>();
-
-            games.Add("QUIPLASH");
-
-            if (games.Contains(name))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
         /*CONSTRUCTOR*/
         public static DiscordGame ConstructGame(string name, GameLobby lobby)
         {
             name = name.ToUpperInvariant();
-            if (name == "QUIPLASH")
+            switch (name)
             {
-                return new Quiplash.Quiplash(lobby.Client as DiscordSocketClient, lobby.Channel as SocketTextChannel);
-            }
-            else
-            {
-                return null;
+                case "QUIPLASH":
+                case "Q":
+                    return new Quiplash.Quiplash(lobby.Client as DiscordSocketClient, lobby.Channel as SocketTextChannel);
+                case "KEEP YOUR FRIENDS CLOSE":
+                case "K":
+                    return new PlayerFibbage.PlayerFibbage(lobby.Client as DiscordSocketClient, lobby.Channel as SocketTextChannel);
+                default:
+                    return null;
             }
         }
+
+
 
         /*METHODS*/
         public virtual Task Start(List<IUser> users)

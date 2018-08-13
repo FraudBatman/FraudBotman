@@ -107,7 +107,16 @@ namespace DiscordQuiplash.Games.PlayerFibbage
             }
         }
 
-        public async Task GetAnswer(EmbedBuilder prompt, ulong subjectID, int promptIndex, int playerCount, int playerIndex, CancellationToken ct)
+        /// <summary>
+        /// Gets what the person answers once all lies have been submitted
+        /// </summary>
+        /// <param name="prompt">The prompt (to present and format in DMs)</param>
+        /// <param name="subjectID">The ID of the round's player, so they can't score for their own round</param>
+        /// <param name="promptIndex">The prompt's index, so it can be properly formatted</param>
+        /// <param name="playerIndex">The player's index according to the player list</param>
+        /// <param name="ct">For cancelling when time runs out</param>
+        /// <returns></returns>
+        public async Task GetAnswer(EmbedBuilder prompt, ulong subjectID, int promptIndex, int playerIndex, CancellationToken ct)
         {
             try
             {
@@ -227,7 +236,11 @@ namespace DiscordQuiplash.Games.PlayerFibbage
         public bool FinishedTurn
         {
             get { return finishedTurn; }
-            set { finishedTurn = value; }
+        }
+
+        public int Answer
+        {
+            get { return answer; }
         }
     }
 }
