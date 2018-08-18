@@ -70,7 +70,7 @@ namespace DiscordQuiplash
                 await msg.Channel.SendMessageAsync("Shutdown command received, please hold...");
             }
 
-            if (msg.Channel.Id == 464436223797100554 || msg.Channel.Id == 470033076962197514)
+            if (msg.Channel.Id == 464436223797100554 || msg.Channel.Id == 470033076962197514 || msg.Channel.Id == 476101751477501963)
             {
                 var channel = client.GetChannel(480221654845358090);
                 await (channel as ITextChannel).SendMessageAsync($"{msg.Author.Username} - {msg.CreatedAt.ToUniversalTime().ToString("MMM dd, HH:mm")} : #{msg.Channel.Name}\n{msg.Content}");
