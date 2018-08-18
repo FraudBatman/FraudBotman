@@ -89,7 +89,7 @@ namespace DiscordQuiplash.Games.Quiplash
                         break;
                 }
 
-                ranking += $"{players[i].User.Username} | {players[i].Score} points +\n";
+                ranking += $"{players[i].User.Username} | {players[i].Score} points\n";
             }
 
             embed.AddField("FINAL SCORES", ranking);

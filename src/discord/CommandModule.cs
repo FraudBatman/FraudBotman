@@ -92,6 +92,7 @@ namespace DiscordQuiplash.Discord
                     if (lobby.LobbyGame == null)
                     {
                         await ReplyAsync("That game doesn't exist.");
+                        await Task.CompletedTask;
                     }
 
                     lobbies.Add(lobby);
@@ -149,12 +150,6 @@ namespace DiscordQuiplash.Discord
             {
                 await ReplyAsync(err.ToString());
             }
-        }
-
-        [Command("clay", RunMode = RunMode.Async)]
-        public async Task Clay(string gameName = "K")
-        {
-            Play("K");
         }
 
         [Command("shutup", RunMode = RunMode.Async)]
