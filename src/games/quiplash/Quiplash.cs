@@ -12,7 +12,7 @@ namespace DiscordQuiplash.Games.Quiplash
         /*MEMBERS*/
         DiscordSocketClient client = null;
         SocketTextChannel channel = null;
-        List<Player> players = null;
+        List<QuiplashPlayer> players = null;
 
         /*CONSTRUCTORS*/
         public Quiplash(DiscordSocketClient socketClient, SocketTextChannel gameChannel)
@@ -21,7 +21,7 @@ namespace DiscordQuiplash.Games.Quiplash
             Name = "Quiplash";
             client = socketClient;
             channel = gameChannel;
-            players = new List<Player>();
+            players = new List<QuiplashPlayer>();
         }
 
         /*METHODS*/
@@ -29,7 +29,7 @@ namespace DiscordQuiplash.Games.Quiplash
         {
             foreach (IUser user in users)
             {
-                players.Add(new Player(client, channel, user));
+                players.Add(new QuiplashPlayer(client, channel, user));
             }
             var embed = new EmbedBuilder();
             embed.Color = new Color(255, 255, 0);
@@ -59,7 +59,7 @@ namespace DiscordQuiplash.Games.Quiplash
             embed.Color = new Color(255, 255, 0);
             embed.Title = players[winningIndex].User.Username + " wins!";
 
-            players.Sort(delegate (Player x, Player y)
+            players.Sort(delegate (QuiplashPlayer x, QuiplashPlayer y)
             {
                 var a = y.Score.CompareTo(x.Score);
 
@@ -89,7 +89,7 @@ namespace DiscordQuiplash.Games.Quiplash
                         break;
                 }
 
-                ranking += $"{players[i].User.Username} | {players[i].Score} points +\n";
+                ranking += $"{players[i].User.Username} | {players[i].Score} points\n";
             }
 
             embed.AddField("FINAL SCORES", ranking);
@@ -138,7 +138,7 @@ namespace DiscordQuiplash.Games.Quiplash
                 var prompts = new List<Prompt>();
 
                 //create a list of unique prompts, while also resetting everyone's prompt count
-                foreach (Player p in players)
+                foreach (QuiplashPlayer p in players)
                 {
                     p.PromptsRemaining = 2;
                     Prompt prompt = null;
@@ -172,7 +172,7 @@ namespace DiscordQuiplash.Games.Quiplash
                     {
                         //determine who to pick
                         bool twoExists = false;
-                        foreach (Player player in players)
+                        foreach (QuiplashPlayer player in players)
                         {
                             if (player.PromptsRemaining == 2)
                                 twoExists = true;
@@ -225,7 +225,7 @@ namespace DiscordQuiplash.Games.Quiplash
                 embed.Title = $"Round {roundNumber}";
                 embed.Color = new Color(255, 255, 0);
 
-                foreach (Player player in players)
+                foreach (QuiplashPlayer player in players)
                 {
                     embed.Description += $"{player.User.Username}: {(player.FinishedTurn ? ":white_check_mark:" : ":x:")}\n";
                 }
@@ -247,14 +247,14 @@ namespace DiscordQuiplash.Games.Quiplash
                         embed.Title = $"Round {roundNumber}";
                         embed.Color = new Color(255, 255, 0);
 
-                        foreach (Player player in players)
+                        foreach (QuiplashPlayer player in players)
                         {
                             embed.Description += $"{player.User.Username}: {(player.FinishedTurn ? ":white_check_mark:" : ":x:")}\n";
                         }
 
                         bool allDone = true;
 
-                        foreach (Player player in players)
+                        foreach (QuiplashPlayer player in players)
                         {
                             if (!player.FinishedTurn)
                             {
@@ -298,14 +298,14 @@ namespace DiscordQuiplash.Games.Quiplash
                         embed.Title = $"Round {roundNumber}";
                         embed.Color = new Color(255, 255, 0);
 
-                        foreach (Player player in players)
+                        foreach (QuiplashPlayer player in players)
                         {
                             embed.Description += $"{player.User.Username}: {(player.FinishedTurn ? ":white_check_mark:" : ":x:")}\n";
                         }
 
                         bool allDone = true;
 
-                        foreach (Player player in players)
+                        foreach (QuiplashPlayer player in players)
                         {
                             if (!player.FinishedTurn)
                             {
@@ -480,7 +480,7 @@ namespace DiscordQuiplash.Games.Quiplash
                 {
                     string finalMessage = "";
 
-                    foreach (Player player in players)
+                    foreach (QuiplashPlayer player in players)
                     {
                         finalMessage += player.User.Username + ": " + player.Score + "\n";
                     }
