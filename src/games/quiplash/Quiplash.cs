@@ -61,7 +61,7 @@ namespace DiscordQuiplash.Games.Quiplash
 
             players.Sort(delegate (Player x, Player y)
             {
-                var a = x.Score.CompareTo(y.Score);
+                var a = y.Score.CompareTo(x.Score);
 
                 if (a == 0)
                     a = x.User.Id.CompareTo(y.User.Id);
