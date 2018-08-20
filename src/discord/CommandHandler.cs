@@ -38,7 +38,10 @@ namespace DiscordQuiplash.Discord
 
             // If the command failed, notify the user
             if (!result.IsSuccess)
-                await message.Channel.SendMessageAsync($"**Error:** {result.ErrorReason}");
+            {
+                if (result.Error.Value != CommandError.UnknownCommand)
+                    await message.Channel.SendMessageAsync($"**Error:** {result.ErrorReason}");
+            }
         }
     }
 }
