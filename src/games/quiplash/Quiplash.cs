@@ -109,15 +109,15 @@ namespace DiscordQuiplash.Games.Quiplash
                 {
                     case 1:
                         embed.Title = ("Round 1");
-                        embed.Description = ("Rounds are worth 1000 points. The winner bonus is 500 points, and the quiplash bonus is 1500 points");
+                        embed.Description = ("Rounds are worth 1000 points. The winner bonus is 100 points, and the quiplash bonus is 250 points");
                         break;
                     case 2:
                         embed.Title = ("Round 2");
-                        embed.Description = ("Rounds are worth 2000 points. The winner bonus is 1000 points, and the quiplash bonus is 3000 points");
+                        embed.Description = ("Rounds are worth 2000 points. The winner bonus is 200 points, and the quiplash bonus is 500 points");
                         break;
                     case 3:
                         embed.Title = ("Round 3");
-                        embed.Description = ("Rounds are worth 3000 points. The winner bonus is 1500 points, and the quiplash bonus is 4500 points. As a bonus rule, you will only see your first prompt, and the second prompt's answer will be the one you filled in for the first prompt. Good luck!");
+                        embed.Description = ("Rounds are worth 3000 points. The winner bonus is 300 points, and the quiplash bonus is 750 points. As a bonus rule, you will only see your first prompt, and the second prompt's answer will be the one you filled in for the first prompt. Good luck!");
                         break;
                     default:
                         break;
@@ -416,12 +416,12 @@ namespace DiscordQuiplash.Games.Quiplash
                     if (aPoints > bPoints)
                     {
                         //winner bonus
-                        aPoints += 500 * roundNumber;
+                        aPoints += 100 * roundNumber;
 
                         //quiplash bonus
                         if (aVotes + bVotes > 7 && ((double)aVotes / (aVotes + bVotes) > .8))
                         {
-                            aPoints += 1000 * roundNumber;
+                            aPoints += 250 * roundNumber;
 
                             content +=
                                 players[prompt.PlayerA].User.Username + " got a quiplash for a total of " + (int)aPoints + " points. (" + (1500 * roundNumber) + " point bonus for quiplash)\n" +
@@ -439,12 +439,12 @@ namespace DiscordQuiplash.Games.Quiplash
                     else if (bPoints > aPoints)
                     {
                         //winner bonus
-                        bPoints += 500 * roundNumber;
+                        bPoints += 100 * roundNumber;
 
                         //quiplash bonus
                         if (aVotes + bVotes > 7 && ((double)bVotes / (aVotes + bVotes) > .8))
                         {
-                            bPoints += 1000 * roundNumber;
+                            bPoints += 250 * roundNumber;
 
                             content +=
                                 players[prompt.PlayerA].User.Username + " earned " + (int)aPoints + " points.\n" +
