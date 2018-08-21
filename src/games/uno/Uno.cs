@@ -27,7 +27,12 @@ namespace DiscordQuiplash.Games.Uno
         /*METHODS*/
         public override Task Start(List<IUser> users)
         {
+            deck = UnoCard.CreateDeck();
 
+            foreach (UnoPlayer player in players)
+            {
+                player.Draw(deck);
+            }
 
             return Task.CompletedTask;
         }
