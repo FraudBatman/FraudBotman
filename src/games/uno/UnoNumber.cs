@@ -15,5 +15,7 @@ namespace DiscordQuiplash.Games.Uno
         Draw = 10,
         Skip = 11,
         Reverse = 12,
+        Wild = 13,
+        WildDraw = 14
     }
 }
