@@ -12,6 +12,7 @@ namespace DiscordQuiplash.Games.Uno
         /*MEMBERS*/
         List<UnoCard> hand;
         bool responded = false;
+        bool turnDone = false;
         string response = "";
         ulong lastResponse = 0;
 
@@ -43,6 +44,7 @@ namespace DiscordQuiplash.Games.Uno
             {
                 short answer = -1;
                 UnoCard chosenCard = null;
+                turnDone = false;
                 var embed = new EmbedBuilder();
                 embed.Title = "Your Turn!";
                 embed.Color = new Color(0, 255, 255);
@@ -94,11 +96,22 @@ namespace DiscordQuiplash.Games.Uno
                         chosenCard = hand[(hand.Count - 1)];
                         hand.RemoveAt((hand.Count - 1));
                     }
+                    else
+                    {
+                        chosenCard.Color = UnoColor.Wild;
+                        chosenCard.Number = UnoNumber.Draw;
+                    }
+                    turnDone = true;
                 }
                 else
                 {
                     chosenCard = playables[(answer - 1)];
                     hand.Remove(chosenCard);
+                    if (chosenCard.Color == UnoColor.Wild)
+                    {
+                        //FUCK
+                    }
+                    turnDone = true;
                 }
 
                 await User.SendMessageAsync("That's all! Please return to the game channel.");
@@ -136,6 +149,12 @@ namespace DiscordQuiplash.Games.Uno
         {
             get { return hand; }
             set { hand = value; }
+        }
+
+        public bool TurnDone
+        {
+            get { return turnDone; }
+            set { turnDone = value; }
         }
     }
 }
