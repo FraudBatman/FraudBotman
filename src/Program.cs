@@ -63,15 +63,6 @@ namespace DiscordQuiplash
 
         async Task MessageReceived(SocketMessage msg)
         {
-            //doot doot
-            if (msg.Content.ToLowerInvariant() == "thank mr skeltal" || msg.Content.ToLowerInvariant() == "thank mr. skeltal")
-            {
-                var rand = new Random();
-                if (rand.Next(4) == 3)
-                    await msg.Channel.SendMessageAsync(":trumpet: :trumpet:");
-                else
-                    await msg.Channel.SendMessageAsync("doot doot");
-            }
             //shutdown function
             if (msg.Author.Id == 289869983691833344 && msg.Content == "164519888029745152")
             {
