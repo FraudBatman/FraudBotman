@@ -230,16 +230,6 @@ namespace DiscordQuiplash.Games.Quiplash
                         players[i].takeTurn(prompts, cts.Token, i);
                     }
                 }
-                //sort everyone by score to obscure player order
-                players.Sort(delegate (QuiplashPlayer x, QuiplashPlayer y)
-                {
-                    var a = y.Score.CompareTo(x.Score);
-
-                    if (a == 0)
-                        a = x.User.Id.CompareTo(y.User.Id);
-
-                    return a;
-                });
 
                 //NEW PLAYER PROGRESS SHEET
                 embed = new EmbedBuilder();
