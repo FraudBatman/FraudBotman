@@ -153,7 +153,13 @@ namespace DiscordQuiplash.Games.Quiplash
                 //shuffle the order players are assigned prompts
                 for (int i = 0; i < players.Count; i++)
                 {
-                    var playerTo =
+                    var playerTo = random.Next(players.Count - 1);
+                    if (playerTo == i)
+                        continue;
+                    //swap
+                    var dummy = players[i];
+                    players[i] = players[playerTo];
+                    players[playerTo] = dummy;
                 }
 
                 //assign prompts to players
@@ -490,6 +496,17 @@ namespace DiscordQuiplash.Games.Quiplash
                 if (roundNumber != 3)
                 {
                     string finalMessage = "";
+
+                    //sort players by score for score showing
+                    players.Sort(delegate (QuiplashPlayer x, QuiplashPlayer y)
+                    {
+                        var a = y.Score.CompareTo(x.Score);
+
+                        if (a == 0)
+                            a = x.User.Id.CompareTo(y.User.Id);
+
+                        return a;
+                    });
 
                     foreach (QuiplashPlayer player in players)
                     {
