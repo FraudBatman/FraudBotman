@@ -18,14 +18,13 @@ namespace DiscordQuiplash.Games
             {
                 case "QUIPLASH":
                 case "Q":
-                    return new Quiplash.Quiplash(lobby.Client as DiscordSocketClient, lobby.Channel as SocketTextChannel);
-                /* another time maybe
-                case "KEEP YOUR FRIENDS CLOSE":
-                case "K":
-                    return new PlayerFibbage.PlayerFibbage(lobby.Client as DiscordSocketClient, lobby.Channel as SocketTextChannel);
-                */
                 default:
-                    return null;
+                    return new Quiplash.Quiplash(lobby.Client as DiscordSocketClient, lobby.Channel as SocketTextChannel);
+                    /* another time maybe
+                    case "KEEP YOUR FRIENDS CLOSE":
+                    case "K":
+                        return new PlayerFibbage.PlayerFibbage(lobby.Client as DiscordSocketClient, lobby.Channel as SocketTextChannel);
+                    */
             }
         }
 
