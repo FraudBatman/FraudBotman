@@ -150,6 +150,12 @@ namespace DiscordQuiplash.Games.Quiplash
                     prompts.Add(prompt);
                 }
 
+                //shuffle the order players are assigned prompts
+                for (int i = 0; i < players.Count; i++)
+                {
+                    var playerTo =
+                }
+
                 //assign prompts to players
                 int playerAIndex = 0;
                 int lastOpponent = -1;
@@ -429,14 +435,14 @@ namespace DiscordQuiplash.Games.Quiplash
                             aPoints += 250 * roundNumber;
 
                             content +=
-                                players[prompt.PlayerA].User.Username + " got a quiplash for a total of " + (int)aPoints + " points. (" + (1500 * roundNumber) + " point bonus for quiplash)\n" +
+                                players[prompt.PlayerA].User.Username + " got a quiplash for a total of " + (int)aPoints + " points. (" + (250 * roundNumber) + " point bonus for quiplash)\n" +
                                 players[prompt.PlayerB].User.Username + " earned " + (int)bPoints + " points.";
                         }
 
                         else
                         {
                             content +=
-                                players[prompt.PlayerA].User.Username + " earned " + (int)aPoints + " points. (" + (500 * roundNumber) + " point bonus for winning)\n" +
+                                players[prompt.PlayerA].User.Username + " earned " + (int)aPoints + " points. (" + (100 * roundNumber) + " point bonus for winning)\n" +
                                 players[prompt.PlayerB].User.Username + " earned " + (int)bPoints + " points.";
                         }
                     }
@@ -453,13 +459,13 @@ namespace DiscordQuiplash.Games.Quiplash
 
                             content +=
                                 players[prompt.PlayerA].User.Username + " earned " + (int)aPoints + " points.\n" +
-                                players[prompt.PlayerB].User.Username + " got a quiplash for a total of " + (int)bPoints + " points. (" + (1500 * roundNumber) + " point bonus for quiplash)";
+                                players[prompt.PlayerB].User.Username + " got a quiplash for a total of " + (int)bPoints + " points. (" + (250 * roundNumber) + " point bonus for quiplash)";
                         }
                         else
                         {
                             content +=
                                 players[prompt.PlayerA].User.Username + " earned " + (int)aPoints + " points.\n" +
-                                players[prompt.PlayerB].User.Username + " earned " + (int)bPoints + " points. (" + (500 * roundNumber) + " point bonus for winning)\n";
+                                players[prompt.PlayerB].User.Username + " earned " + (int)bPoints + " points. (" + (100 * roundNumber) + " point bonus for winning)\n";
                         }
                     }
                     //draw
