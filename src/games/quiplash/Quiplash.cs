@@ -339,13 +339,13 @@ namespace DiscordQuiplash.Games.Quiplash
                             if (voters.Current.Id == players[prompt.PlayerA].User.Id)
                             {
                                 aVotes--;
-                                break;
+                                continue;
                             }
                             //check if voter is the owner of response B
                             if (voters.Current.Id == players[prompt.PlayerB].User.Id)
                             {
                                 aVotes--;
-                                break;
+                                continue;
                             }
                         }
                     }
@@ -361,13 +361,13 @@ namespace DiscordQuiplash.Games.Quiplash
                             if (voters.Current.Id == players[prompt.PlayerA].User.Id)
                             {
                                 bVotes--;
-                                break;
+                                continue;
                             }
                             //check if voter is the owner of response B
                             if (voters.Current.Id == players[prompt.PlayerB].User.Id)
                             {
                                 bVotes--;
-                                break;
+                                continue;
                             }
                         }
                     }
