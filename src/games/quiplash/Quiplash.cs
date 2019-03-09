@@ -343,6 +343,11 @@ namespace DiscordQuiplash.Games.Quiplash
                 //vote and scores for each prompt
                 foreach (Prompt prompt in prompts)
                 {
+                    //check if the prompt will swap players A and B
+                    if (random.Next(1) == 1)
+                    {
+                        prompt.answerSwap();
+                    }
                     embed = new EmbedBuilder();
 
                     embed.Color = new Color(255, 255, 0);

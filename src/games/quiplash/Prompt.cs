@@ -50,6 +50,17 @@ namespace DiscordQuiplash.Games.Quiplash
                 + "B) " + AnswerB;
         }
 
+        public void answerSwap()
+        {
+            var dummyAnswer = answerA;
+            answerA = answerB;
+            answerB = dummyAnswer;
+
+            var dummyPlayer = playerA;
+            playerA = playerB;
+            playerB = dummyPlayer;
+        }
+
         /*PROPERTIES*/
         public string Question
         {
