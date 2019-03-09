@@ -303,7 +303,7 @@ namespace DiscordQuiplash.Games.Quiplash
                 foreach (Prompt prompt in prompts)
                 {
                     //check if the prompt will swap players A and B
-                    if (random.Next(1) == 1)
+                    if (random.Next(2) == 1)
                     {
                         prompt.answerSwap();
                     }

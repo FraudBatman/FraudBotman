@@ -135,6 +135,9 @@ namespace DiscordQuiplash.Games.Quiplash
                         */
                     }
                 }
+
+                //send the prompts
+                await User.SendMessageAsync(text);
                 while (!responded)
                 {
                     await Task.Delay(50);
