@@ -392,9 +392,17 @@ namespace DiscordQuiplash.Games.Quiplash
                         bPoints = 0;
                     }
 
-                    //show votes
-                    embed.AddField("VOTES", $"\"{prompt.AnswerA}\" - {players[prompt.PlayerA].User.Username} ({aVotes} votes)\n"
-                    + $"\"{prompt.AnswerB}\" - {players[prompt.PlayerB].User.Username} ({bVotes} votes)");
+                    if (roundNumber != 3)
+                    {
+                        //show votes and usernames
+                        embed.AddField("VOTES", $"\"{prompt.AnswerA}\" - {players[prompt.PlayerA].User.Username} ({aVotes} votes)\n"
+                        + $"\"{prompt.AnswerB}\" - {players[prompt.PlayerB].User.Username} ({bVotes} votes)");
+                    }
+                    else
+                    {
+                        embed.AddField("VOTES", $"\"{prompt.AnswerA}\" - ??? ({aVotes} votes)\n"
+                        + $"\"{prompt.AnswerB}\" - ??? ({bVotes} votes)");
+                    }
 
                     //finish the message
                     string content = "";
@@ -410,15 +418,15 @@ namespace DiscordQuiplash.Games.Quiplash
                             aPoints += 250 * roundNumber;
 
                             content +=
-                                players[prompt.PlayerA].User.Username + " got a quiplash for a total of " + (int)aPoints + " points. (" + (250 * roundNumber) + " point bonus for quiplash)\n" +
-                                players[prompt.PlayerB].User.Username + " earned " + (int)bPoints + " points.";
+                                (roundNumber != 3 ? players[prompt.PlayerA].User.Username : "???") + " got a quiplash for a total of " + (int)aPoints + " points. (" + (250 * roundNumber) + " point bonus for quiplash)\n" +
+                                (roundNumber != 3 ? players[prompt.PlayerB].User.Username : "???") + " earned " + (int)bPoints + " points.";
                         }
 
                         else
                         {
                             content +=
-                                players[prompt.PlayerA].User.Username + " earned " + (int)aPoints + " points. (" + (100 * roundNumber) + " point bonus for winning)\n" +
-                                players[prompt.PlayerB].User.Username + " earned " + (int)bPoints + " points.";
+                                (roundNumber != 3 ? players[prompt.PlayerA].User.Username : "???") + " earned " + (int)aPoints + " points. (" + (100 * roundNumber) + " point bonus for winning)\n" +
+                                (roundNumber != 3 ? players[prompt.PlayerB].User.Username : "???") + " earned " + (int)bPoints + " points.";
                         }
                     }
                     //b won
@@ -433,22 +441,22 @@ namespace DiscordQuiplash.Games.Quiplash
                             bPoints += 250 * roundNumber;
 
                             content +=
-                                players[prompt.PlayerA].User.Username + " earned " + (int)aPoints + " points.\n" +
-                                players[prompt.PlayerB].User.Username + " got a quiplash for a total of " + (int)bPoints + " points. (" + (250 * roundNumber) + " point bonus for quiplash)";
+                                (roundNumber != 3 ? players[prompt.PlayerA].User.Username : "???") + " earned " + (int)aPoints + " points.\n" +
+                                (roundNumber != 3 ? players[prompt.PlayerB].User.Username : "???") + " got a quiplash for a total of " + (int)bPoints + " points. (" + (250 * roundNumber) + " point bonus for quiplash)";
                         }
                         else
                         {
                             content +=
-                                players[prompt.PlayerA].User.Username + " earned " + (int)aPoints + " points.\n" +
-                                players[prompt.PlayerB].User.Username + " earned " + (int)bPoints + " points. (" + (100 * roundNumber) + " point bonus for winning)\n";
+                                (roundNumber != 3 ? players[prompt.PlayerA].User.Username : "???") + " earned " + (int)aPoints + " points.\n" +
+                                (roundNumber != 3 ? players[prompt.PlayerB].User.Username : "???") + " earned " + (int)bPoints + " points. (" + (100 * roundNumber) + " point bonus for winning)\n";
                         }
                     }
                     //draw
                     else
                     {
                         content +=
-                            players[prompt.PlayerA].User.Username + " earned " + (int)aPoints + " points.\n" +
-                            players[prompt.PlayerB].User.Username + " earned " + (int)bPoints + " points.";
+                            (roundNumber != 3 ? players[prompt.PlayerA].User.Username : "???") + " earned " + (int)aPoints + " points.\n" +
+                            (roundNumber != 3 ? players[prompt.PlayerB].User.Username : "???") + " earned " + (int)bPoints + " points.";
                     }
 
                     embed.AddField("SCORES", content);
