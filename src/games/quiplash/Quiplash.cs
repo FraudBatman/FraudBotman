@@ -117,7 +117,7 @@ namespace DiscordQuiplash.Games.Quiplash
                         break;
                     case 3:
                         embed.Title = ("Round 3");
-                        embed.Description = ("Rounds are worth 3000 points. The winner bonus is 300 points, and the quiplash bonus is 750 points. As a bonus rule, you will only see your first prompt, and the second prompt's answer will be the one you filled in for the first prompt. Good luck!");
+                        embed.Description = ("Rounds are worth 3000 points. The winner bonus is 300 points, and the quiplash bonus is 750 points. As a bonus rule, you will see both prompts, and have to answer both with one answer. Good luck!");
                         break;
                     default:
                         break;
@@ -247,108 +247,55 @@ namespace DiscordQuiplash.Games.Quiplash
                 //two minute timer, or one minute for the final round
                 int twoSeconds = 0;
 
-                if (roundNumber != 3)
+                while (twoSeconds < 60)
                 {
-                    while (twoSeconds < 60)
+                    await Task.Delay(2000);
+                    twoSeconds++;
+
+                    //refresh the embed
+                    embed = new EmbedBuilder();
+                    embed.Title = $"Round {roundNumber}";
+                    embed.Color = new Color(255, 255, 0);
+
+                    foreach (QuiplashPlayer player in players)
                     {
-                        await Task.Delay(2000);
-                        twoSeconds++;
+                        embed.Description += $"{player.User.Username}: {(player.FinishedTurn ? ":white_check_mark:" : ":x:")}\n";
+                    }
 
-                        //refresh the embed
-                        embed = new EmbedBuilder();
-                        embed.Title = $"Round {roundNumber}";
-                        embed.Color = new Color(255, 255, 0);
+                    bool allDone = true;
 
-                        foreach (QuiplashPlayer player in players)
+                    foreach (QuiplashPlayer player in players)
+                    {
+                        if (!player.FinishedTurn)
                         {
-                            embed.Description += $"{player.User.Username}: {(player.FinishedTurn ? ":white_check_mark:" : ":x:")}\n";
-                        }
-
-                        bool allDone = true;
-
-                        foreach (QuiplashPlayer player in players)
-                        {
-                            if (!player.FinishedTurn)
-                            {
-                                allDone = false;
-                            }
-                        }
-
-                        if (twoSeconds >= 30 && !allDone)
-                        {
-                            embed.AddField("One minute remaining!", "Hurry up!");
-                        }
-
-                        if (allDone)
-                        {
-                            embed.AddField("All Done!", "Prepare to vote!");
-                        }
-
-                        if (!allDone && twoSeconds == 60)
-                        {
-                            //force end of turn
-                            cts.Cancel();
-                            embed.AddField("Time's Up!", "Prepare to vote!");
-                        }
-                        await (message as IUserMessage).ModifyAsync(msg => msg.Embed = embed.Build());
-
-                        if (allDone)
-                        {
-                            break;
+                            allDone = false;
                         }
                     }
-                }
-                else
-                {
-                    while (twoSeconds < 30)
+
+                    if (twoSeconds >= 30 && !allDone)
                     {
-                        await Task.Delay(2000);
-                        twoSeconds++;
+                        embed.AddField("One minute remaining!", "Hurry up!");
+                    }
 
-                        //refresh the embed
-                        embed = new EmbedBuilder();
-                        embed.Title = $"Round {roundNumber}";
-                        embed.Color = new Color(255, 255, 0);
+                    if (allDone)
+                    {
+                        embed.AddField("All Done!", "Prepare to vote!");
+                    }
 
-                        foreach (QuiplashPlayer player in players)
-                        {
-                            embed.Description += $"{player.User.Username}: {(player.FinishedTurn ? ":white_check_mark:" : ":x:")}\n";
-                        }
+                    if (!allDone && twoSeconds == 60)
+                    {
+                        //force end of turn
+                        cts.Cancel();
+                        embed.AddField("Time's Up!", "Prepare to vote!");
+                    }
+                    await (message as IUserMessage).ModifyAsync(msg => msg.Embed = embed.Build());
 
-                        bool allDone = true;
-
-                        foreach (QuiplashPlayer player in players)
-                        {
-                            if (!player.FinishedTurn)
-                            {
-                                allDone = false;
-                            }
-                        }
-
-                        if (twoSeconds >= 15 && !allDone)
-                        {
-                            embed.AddField("30 seconds remaining!", "Hurry up!");
-                        }
-
-                        if (allDone)
-                        {
-                            embed.AddField("All Done!", "Prepare to vote!");
-                        }
-
-                        if (!allDone && twoSeconds == 30)
-                        {
-                            //force end of turn
-                            cts.Cancel();
-                            embed.AddField("Time's Up!", "Prepare to vote!");
-                        }
-                        await (message as IUserMessage).ModifyAsync(msg => msg.Embed = embed.Build());
-
-                        if (allDone)
-                        {
-                            break;
-                        }
+                    if (allDone)
+                    {
+                        break;
                     }
                 }
+
 
                 await Task.Delay(5000);
 

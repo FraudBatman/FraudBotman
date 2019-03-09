@@ -84,11 +84,13 @@ namespace DiscordQuiplash.Games.Quiplash
         {
             try
             {
-                await User.SendMessageAsync("Please answer the following prompt as best as you can. Your answer will be carried over to a secret 2nd prompt.");
+                await User.SendMessageAsync("Please answer the following prompts as best as you can. Your answer will be used for both prompts.");
 
                 //set responded off and clear response
                 responded = false;
                 response = "";
+
+                var text = "";
 
                 //connect message being recieved to response checking
                 Client.MessageReceived += CheckForResponse;
@@ -98,10 +100,11 @@ namespace DiscordQuiplash.Games.Quiplash
                     {
                         if (!responded)
                         {
+                            text += prompt.Question + "\n";
                             //send the prompt
-                            await User.SendMessageAsync(prompt.Question);
+                            //await User.SendMessageAsync(prompt.Question);
                         }
-
+                        /*
                         //wait for response (see method CheckForResponse)
                         while (!responded)
                         {
@@ -110,15 +113,17 @@ namespace DiscordQuiplash.Games.Quiplash
                         }
                         prompt.AnswerA = response;
                         responded = true;
+                        */
                     }
                     else if (prompt.PlayerB == playerID)
                     {
                         if (!responded)
                         {
+                            text += prompt.Question + "\n";
                             //send the prompt
-                            await User.SendMessageAsync(prompt.Question);
+                            //await User.SendMessageAsync(prompt.Question);
                         }
-
+                        /*
                         //wait for response (see method CheckForResponse)
                         while (!responded)
                         {
@@ -127,8 +132,27 @@ namespace DiscordQuiplash.Games.Quiplash
                         }
                         prompt.AnswerB = response;
                         responded = true;
+                        */
                     }
                 }
+                while (!responded)
+                {
+                    await Task.Delay(50);
+                    ct.ThrowIfCancellationRequested();
+                }
+
+                foreach (Prompt prompt in prompts)
+                {
+                    if (prompt.PlayerA == playerID)
+                    {
+                        prompt.AnswerA = response;
+                    }
+                    if (prompt.PlayerB == playerID)
+                    {
+                        prompt.AnswerB = response;
+                    }
+                }
+
                 await User.SendMessageAsync("That's all! Please return to the game channel.");
                 finishedTurn = true;
                 await Task.CompletedTask;
